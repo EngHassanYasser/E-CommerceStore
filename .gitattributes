@@ -1,21 +1,13 @@
-* text=auto eol=lf
-
-*.blade.php diff=html
-*.css diff=css
-*.html diff=html
-*.md diff=markdown
-*.php diff=php
-
-/.github export-ignore
-CHANGELOG.md export-ignore
-.styleci.yml export-ignore
-
-/public linguist-vendored
-/resources linguist-vendored
-/node_modules linguist-vendored
-
-*.css linguist-vendored
-*.js linguist-vendored
-*.scss linguist-vendored
-
+# Treat Blade as PHP
 *.blade.php linguist-language=PHP
+
+# Ignore frontend assets from language stats
+/public/** linguist-vendored
+/resources/** linguist-vendored
+/node_modules/** linguist-vendored
+
+# Ignore built/static assets
+*.css linguist-vendored
+*.scss linguist-vendored
+*.js linguist-vendored
+*.map linguist-vendored
