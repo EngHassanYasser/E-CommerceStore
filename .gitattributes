@@ -1,13 +1,20 @@
-# Treat Blade as PHP
+# اجعل ملفات Blade تُحسب PHP
 *.blade.php linguist-language=PHP
 
-# Ignore frontend assets from language stats
-/public/** linguist-vendored
-/resources/** linguist-vendored
-/node_modules/** linguist-vendored
+# اجعل ملفات PHP الرئيسية تُحسب PHP
+*.php linguist-language=PHP
 
-# Ignore built/static assets
-*.css linguist-vendored
-*.scss linguist-vendored
-*.js linguist-vendored
-*.map linguist-vendored
+# اجعل ملفات HTML تُحسب HTML
+*.html linguist-language=HTML
+
+# اجعل ملفات CSS تُحسب CSS
+*.css linguist-language=CSS
+*.scss linguist-language=CSS
+
+# اجعل ملفات JS تُحسب JS
+*.js linguist-language=JavaScript
+
+# استبعد ملفات الثيمات والمجلدات الكبيرة من الإحصائية لتظهر PHP أولا
+/public/** linguist-vendored
+/resources/js/** linguist-vendored
+/node_modules/** linguist-vendored
