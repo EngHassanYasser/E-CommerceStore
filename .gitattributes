@@ -9,3 +9,13 @@
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
+
+/public linguist-vendored
+/resources linguist-vendored
+/node_modules linguist-vendored
+
+*.css linguist-vendored
+*.js linguist-vendored
+*.scss linguist-vendored
+
+*.blade.php linguist-language=PHP
