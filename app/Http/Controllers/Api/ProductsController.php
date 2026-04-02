@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth:sanctum')->except(['index','show']);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -62,9 +65,12 @@ class ProductsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        Product::destroy($id);
-        return response()->json(null,204);
+     $product= Product::destroy(19);
+        return response()->json([
+            'message'=>'Product deleted successfully',
+            'product'=>$product
+        ],200);
     }
 }
