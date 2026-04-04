@@ -15,5 +15,6 @@ class HomeController extends Controller
             ->get();
 
         return view('front.home',compact('products'));
+
     }
 }

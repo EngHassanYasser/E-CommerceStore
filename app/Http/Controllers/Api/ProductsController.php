@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
@@ -25,6 +26,11 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
+          if(!$request->user()->tokenCan('product.create')) {
+            return response()->json([
+                'message'=>'Unauthorized'
+            ],403);
+        }
         $request->validate([
             'name'=>'required|string|max:255',
             'description'=>'nullable|string|max:255',
@@ -50,6 +56,9 @@ class ProductsController extends Controller
      */
     public function update(Request $request,Product $product)
     {
+    if(!$request->user()->tokenCan('product.update')) {
+        abort(403,'Unauthorized');
+    }
          $request->validate([
             'name'=>'sometimes|required|string|max:255',
             'description'=>'nullable|string|max:255',
@@ -67,6 +76,9 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
+        if(!Auth::user()->tokenCan('product.delete')) {
+            abort(403,'Unauthorized');
+        }
      $product= Product::destroy(19);
         return response()->json([
             'message'=>'Product deleted successfully',

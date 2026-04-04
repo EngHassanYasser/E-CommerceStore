@@ -23,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('products',ProductsController::class);
 
 Route::post('auth/access-token',[AccessTokensController::class, 'store'])->middleware('guest:sanctum');
+Route::delete('auth/access-token/{token?}',[AccessTokensController::class, 'destroy'])->middleware('auth:sanctum');

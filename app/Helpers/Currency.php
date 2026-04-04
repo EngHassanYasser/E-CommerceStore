@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 use NumberFormatter;
 
 
@@ -12,9 +14,14 @@ class Currency {
        return static::format(...$params);
     }
     public static function format($amount,$currency = null) {
+        $baseCurrency = config('app.currency','USD');
         $formater = new NumberFormatter(config('app.locale'),NumberFormatter::CURRENCY);
         if($currency === null) {
-            $currency =config('app.currency','EUR');
+            $currency =Session::get('currency_code', $baseCurrency);
+        }
+        if($currency !== $baseCurrency) {
+            $rate= Cache::get('currency_rate_'.$currency,0);
+            $amount = $amount * $rate;
         }
         return $formater->formatCurrency($amount,$currency);
     }
