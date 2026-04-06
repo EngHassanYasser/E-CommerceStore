@@ -1,16 +1,16 @@
 <?php
 use App\Http\Controllers\Dashboard\ProductsController;
-use App\Http\Middleware\CheckUserType;
 use Illuminate\support\Facades\Route;
 use App\Http\Controllers\Dashboard\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Dashboard\ProfileController;
+use App\Http\Controllers\Dashboard\RoleController;
 
 Route::get('/profile',[ProfileController::class,'edit'])->name('profile.edite');
 Route::patch('/profile',[ProfileController::class,'update'])->name('profile.update');
 
 Route::group([
-'middleware'=> ['auth:web'],
+'middleware'=> ['auth:admin,web'],
 'prefix'=>'admin/'
 ],function() {
 Route::get('/dashboard',action: [DashboardController::class,'index'])
@@ -23,7 +23,12 @@ Route::put('/categories/{category}/restore',[CategoriesController::class,'restor
 Route::delete('/categories/{category}/force-delete',[CategoriesController::class,'forceDelete'])
 ->name('categories.forceDelete');
 
-Route::resource('dashboard/categories',CategoriesController::class);
-Route::resource('dashboard/products',ProductsController::class);
+
+  Route::resources([
+    'products'=> ProductsController::class,
+    'categories'=> CategoriesController::class,
+    'roles' => RoleController::class
+  ]);
+
 });
 

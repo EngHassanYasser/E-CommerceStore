@@ -1,9 +1,10 @@
 @extends('layouts.dashboard')
 
-@section('title','categories')
+@section('title','Trashed categories')
 @section('breadcrumb')
     @parent
-    <li class="breadcrumb-item active">categories</li>
+    <li class="breadcrumb-item">categories</li>
+    <li class="breadcrumb-item active">Trashed</li>
 @endsection
 
  <base href="/public"> @section('content')
@@ -18,10 +19,7 @@
     <button type="submit" class="btn btn-dark mt-2">Search</button>
  </form>
  <div class="mb-5">
-    @if(Auth::user()->can('categories.create'))
-    <a href={{ route('categories.create') }} class="btn btn-sm btn-outline-primary">create</a>
-    @endif
-    <a href={{ route('categories.trash') }} class="btn btn-sm btn-outline-secondary">Trashed</a>
+    <a href={{ route('categories.index') }} class="btn btn-sm btn-outline-primary">Back</a>
  </div>
  <x-alert type="success"/>
  <x-alert type="info"/>
@@ -31,9 +29,7 @@
                 <td>ID</td>
                 <td>Image</td>
                 <td>Name</td>
-                <td>Parent</td>
-                <td>Products #</td>
-                <td>Created At</td>
+                <td>Deleted At</td>
                 <td></td>
                 <td colspan="2"></td>
             </tr>
@@ -47,23 +43,21 @@
                 <img src="{{ asset('storage/images_folder/'.$category->image) }}" />
                 
                 </td>
-            <td><a href="{{ route('categories.show',$category->id) }}">{{ $category->name }}</a></td>
-            <td>{{ $category->parent->name }}</td>
-            <td>{{ $category->products->count() }}</td>
-            <td>{{ $category->created_at }}</td>
-            <td>
-                @can('categories.edit')
-                <a href="{{ route('categories.edit',$category->id) }}" class="btn btn-sm btn-outline-success">Edit</a>
-                @endcan
+            <td>{{ $category->name }}</td>
+            <td>{{ $category->deleted_at }}</td>
+           <td>
+                <form action="{{ route('categories.restore',$category->id) }}" method="post">
+                    @csrf
+                    @method('put')
+                  <button type="submit" class="btn btn-sm btn-info">Restore</button>
+                </form>
             </td>
             <td>
-                @can('categories.delete')
-                <form action="{{ route('categories.destroy',$category->id) }}" method="post">
+                <form action="{{ route('categories.forceDelete',$category->id) }}" method="post">
                     @csrf
                     @method('delete')
-                  <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                  <button type="submit" class="btn btn-sm btn-danger">Force Delete</button>
                 </form>
-                @endcan
             </td>
           </tr>
           @empty

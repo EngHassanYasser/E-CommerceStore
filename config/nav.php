@@ -10,11 +10,20 @@ return [
         'icon'=>'far fa-circle nav-icon',
         'route'=>'categories.index',
         'title'=>'Categories',
-        'badege'=>'New'
+        'badege'=>'New',
+        'ability'=>'categories.view'
     ],
      [
         'icon'=>'far fa-circle nav-icon',
         'route'=>'products.index',
         'title'=>'products',
+        'ability'=>'products.view'
+    ],
+    [
+        'icon'=>'far fa-circle nav-icon',
+        'route'=>'roles.index',
+        'title'=>'Roles',
+        'active'=>'dashboard.roles.*',
+        'ability'=>'roles.view'
     ]
 ];

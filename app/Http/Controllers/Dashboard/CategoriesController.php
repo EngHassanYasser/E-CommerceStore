@@ -8,6 +8,7 @@ use App\Models\category;
 use Exception;
 use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -19,6 +20,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
+       Gate::authorize('categories.view');
        $request = request();
 
        $query = Category::query();
@@ -39,6 +41,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
+        Gate::authorize('categories.create');
         $parents = Category::all();
         $category = new category();
         return view('dashboard.categories.create',compact('category','parents'));
@@ -49,6 +52,7 @@ class CategoriesController extends Controller
      */
     public function store(CategoryRequest $request)
     { 
+        Gate::authorize('categories.create');
         $request->validate(rules: Category::rules());
 
          $request->merge([
@@ -68,6 +72,7 @@ class CategoriesController extends Controller
      */
     public function show(Category $category)
     {
+        Gate::authorize('categories.view');
         return view('dashboard.categories.show',compact('category'));
     }
 
@@ -76,6 +81,7 @@ class CategoriesController extends Controller
      */
     public function edit(string $id)
     {
+            Gate::authorize('categories.update');
         try {
             $category = category::findOrFail($id);
              $parents = category::where('id','<>',value: $id)
@@ -95,7 +101,7 @@ class CategoriesController extends Controller
      */
     public function update(CategoryRequest $request, string $id)
     {
-
+        Gate::authorize('categories.update');
             $category=category::findOrFail($id);
             $old_image=$category->image;
             $data= $request->except('image');
@@ -116,6 +122,7 @@ class CategoriesController extends Controller
      */
     public function destroy(string $id)
     {
+        Gate::authorize('categories.delete');
         $rowsAffected=category::destroy($id);
         if(!$rowsAffected) {
             abort(code: 404);
@@ -131,6 +138,7 @@ class CategoriesController extends Controller
         return redirect()->route('categories.trash')->with('success','category restored successfully');
     }
     public function forceDelete($id) {
+    gate::authorize('categories.delete');
         $category = Category::onlyTrashed()->findOrFail($id);
         if($category->image) {
               $category->forceDelete();
