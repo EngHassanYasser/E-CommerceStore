@@ -12,6 +12,7 @@ class AdminController extends Controller
     /**
      * Display a listing of the resource.
      */
+   
     public function index()
     {
         $admins = Admin::all();

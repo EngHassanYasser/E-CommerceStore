@@ -8,6 +8,9 @@ use App\Models\Product;
 
 class ProductsController extends Controller
 {
+    public function __construct() {
+        $this->authorizeResource(Product::class,'product');
+    }
     public function index(){
 
     }

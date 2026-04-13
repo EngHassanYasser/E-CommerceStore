@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class ProductsController extends Controller
 {
     public function __construct() {
+        $this->authorizeResource(product::class,'product');
         $this->middleware('auth:sanctum')->except(['index','show']);
     }
     /**
@@ -18,6 +19,8 @@ class ProductsController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('view', product::class);
+
         return Product::filter($request->query())->with('category','store')->paginate(10);
     }
 
@@ -26,6 +29,8 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', product::class);
+
           if(!$request->user()->tokenCan('product.create')) {
             return response()->json([
                 'message'=>'Unauthorized'
@@ -48,7 +53,9 @@ class ProductsController extends Controller
      */
     public function show(Product $product)
     {
-        return new ProductResource($product);
+        $this->authorize('view', $product);
+
+      return $product->load('category','store','tags');
     }
 
     /**
@@ -56,6 +63,8 @@ class ProductsController extends Controller
      */
     public function update(Request $request,Product $product)
     {
+        $this->authorize('update', $product);
+
     if(!$request->user()->tokenCan('product.update')) {
         abort(403,'Unauthorized');
     }
@@ -76,6 +85,8 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
+         $this->authorize('delete', product::class);
+        
         if(!Auth::user()->tokenCan('product.delete')) {
             abort(403,'Unauthorized');
         }

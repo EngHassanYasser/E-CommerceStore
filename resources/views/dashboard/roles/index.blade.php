@@ -18,7 +18,9 @@
     <button type="submit" class="btn btn-dark mt-2">Search</button>
  </form>
  <div class="mb-5">
+    @can('create', App\Models\Role::class)
     <a href={{ route('roles.create') }} class="btn btn-sm btn-outline-primary">create</a>
+    @endcan
     {{-- <a href={{ route('roles.trash') }} class="btn btn-sm btn-outline-secondary">Trashed</a> --}}
  </div>
  <x-alert type="success"/>
@@ -37,13 +39,13 @@
             @forelse ($roles as $Role)
             <tr>
             <td>{{ $Role->id }}</td>
-            <td><a href="{{ route('roles.edit',$Role->id) }}">{{ $Role->name }}</a></td>
+            <td><a href="{{ route('edit',$Role) }}">{{ $Role->name }}</a></td>
             <td>{{ $Role->created_at }}</td>
             <td>
-                <a href="{{ route('roles.edit',$Role->id) }}" class="btn btn-sm btn-outline-success">Edit</a>
+                <a href="{{ route('edit',$Role) }}" class="btn btn-sm btn-outline-success">Edit</a>
             </td>
             <td>
-                <form action="{{ route('roles.destroy',$Role->id) }}" method="post">
+                <form action="{{ route('destroy',$Role) }}" method="post">
                     @csrf
                     @method('delete')
                   <button type="submit" class="btn btn-sm btn-danger">Delete</button>
