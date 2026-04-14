@@ -4,6 +4,7 @@ use App\Http\Controllers\Dashboard\AdminController;
 use App\Http\Controllers\Dashboard\ProductsController;
 use Illuminate\support\Facades\Route;
 use App\Http\Controllers\Dashboard\CategoriesController;
+use App\Http\Controllers\Dashboard\ImportProductsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RoleController;
@@ -25,6 +26,9 @@ Route::put('/categories/{category}/restore',[CategoriesController::class,'restor
 Route::delete('/categories/{category}/force-delete',[CategoriesController::class,'forceDelete'])
 ->name('categories.forceDelete');
 
+Route::get('products/import',[ImportProductsController::class, 'create'])
+->name('products.import');
+Route::post('products/import',[ImportProductsController::class, 'store']);
 
   Route::resources([
     'products'=> ProductsController::class,
@@ -33,5 +37,6 @@ Route::delete('/categories/{category}/force-delete',[CategoriesController::class
   ]);
 Route::resource('dashboard/admin', AdminController::class);
 Route::get('dashboard/admin/trash', [AdminController::class, 'trash'])->name('admin.trash');
+
 });
 

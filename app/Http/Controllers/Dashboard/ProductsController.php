@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ImportProducts;
 use Illuminate\Http\Request;
 use App\Models\product;
 use Illuminate\Support\Facades\Auth;
@@ -124,5 +125,4 @@ class ProductsController extends Controller
 
         return redirect()->route('products.index')->with('success','Product deleted successfully');
     }
-   
 }
