@@ -52,5 +52,9 @@ Route::get('auth/{provider}/callback', [SocialLoginController::class, 'callback'
 Route::get('auth/{provider}/user', [SocialController::class, 'index']);
 Route::get('orders/{order}/pay', [PaymentsController::class, 'create'])
     ->name('orders.payment.create');
+Route::post('orders/{order}/payment-intent', [PaymentsController::class, 'createStripePaymentIntent'])
+    ->name('orders.payment-intent.create');
+Route::get('orders/{order}pay/stripe/return', [PaymentsController::class, 'confirm'])
+    ->name('stripe.return');
 // require __DIR__.'/auth.php';
 require __DIR__.'/dashboard.php';
