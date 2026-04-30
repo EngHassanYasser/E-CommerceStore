@@ -17,4 +17,14 @@ class HomeController extends Controller
         return view('front.home', compact('products'));
 
     }
+    public function contact()
+    {
+        return view('front.contact');
+    }
+    public function BlogGridSideBar() {
+        return view('front.blog-grid-sidbar');
+    }
+    public function AboutUs() {
+        return view('front.about-us');
+    }
 }

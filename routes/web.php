@@ -27,6 +27,9 @@ Route::group([
     'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath'],
 ], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/contact',[HomeController::class, 'contact'])->name('contact');
+    Route::get('/blog-grid-sidebar',[HomeController::class, 'BlogGridSideBar'])->name('blog-grid-sidebar');
+    Route::get('/about-us',[HomeController::class, 'AboutUs'])->name('about-us');
     Route::get('/products', [ProductsController::class, 'index'])->name('product.index');
     Route::get('/products/{product:slug}', [ProductsController::class, 'show'])->name('product.show');
     Route::resource('cart', CartController::class);
