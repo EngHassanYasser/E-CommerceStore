@@ -1,14 +1,4 @@
 <?php
-use App\Http\Controllers\Auth\SocialLoginController;
-use App\Http\Controllers\Front\Auth\TwoFactorAuthenticationController;
-use App\Http\Controllers\Front\CartController;
-use App\Http\Controllers\Front\CheckoutController;
-use App\Http\Controllers\Front\CurrencyConverterController;
-use App\Http\Controllers\Front\HomeController;
-use App\Http\Controllers\Front\PaymentsController;
-use App\Http\Controllers\Front\ProductsController;
-use App\Http\Controllers\SocialController;
-use App\Http\Controllers\StripeWebhooksController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,55 +11,25 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |test test
 */
+
 Route::group([
     'prefix' => LaravelLocalization::setLocale(),
     'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath'],
 ], function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/contact',[HomeController::class, 'contact'])->name('contact');
-    Route::get('/about-us',[HomeController::class, 'AboutUs'])->name('about-us');
-    Route::get('/faq',[HomeController::class, 'HaventFountTheAnswer'])->name('faq');
-    Route::get('/products-list', [ProductsController::class, 'getProductList'])->name('product.list');
-    Route::get('/products', [ProductsController::class, 'index'])->name('product.index');
-    Route::get('/products/{product:slug}', [ProductsController::class, 'show'])->name('product.show');
-    Route::resource('cart', CartController::class);
-
-    Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout');
-    Route::post('checkout', [CheckoutController::class, 'store']);
-
-    Route::get('auth/user/2fa', [TwoFactorAuthenticationController::class, 'index'])->name('front.2fa');
-    // Route::middleware('auth')->group(function () {
-    //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    //     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    // });
-
-    Route::post('currency', [CurrencyConverterController::class, 'store'])->name('currency.store');
-
+    require __DIR__ . '/web/front.php';
+    require __DIR__ . '/web/product.php';
+    require __DIR__ . '/web/payments.php';
+    require __DIR__ . '/web/auth.php';
+    require __DIR__ . '/web/checkout.php';
+    require __DIR__ . '/web/profile.php';
+    require __DIR__ . '/web/cart.php';
 });
 
-Route::get('auth/{provider}/redirect', [SocialLoginController::class, 'redirect'])
-    ->name('auth.socialite.redirect');
-
-Route::get('auth/{provider}/callback', [SocialLoginController::class, 'callback'])
-    ->name('auth.socialite.callback');
-
-Route::get('auth/{provider}/user', [SocialController::class, 'index']);
-Route::get('orders/{order}/pay', [PaymentsController::class, 'create'])
-    ->name('orders.payment.create');
-Route::post('orders/{order}/payment-intent', [PaymentsController::class, 'createStripePaymentIntent'])
-    ->name('orders.payment-intent.create');
-Route::get('orders/{order}pay/stripe/return', [PaymentsController::class, 'confirm'])
-    ->name('stripe.return');
-Route::any('stripe/webhook', [StripeWebhooksController::class, 'handle'])->name('stripe.webhook');
-// require __DIR__.'/auth.php';
-require __DIR__.'/dashboard.php';
-    Route::get('not-found', function () {
+require __DIR__ . '/dashboard.php';
+Route::get('not-found', function () {
     return view('front.error404');
 })->name('not-found');
 
-
 Route::fallback(function () {
-        return response()->view('front.error404', [], 404);
-    });
-
+    return response()->view('front.error404', [], 404);
+});
