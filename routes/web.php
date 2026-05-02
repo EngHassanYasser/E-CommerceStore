@@ -25,7 +25,7 @@ Route::group([
     require __DIR__ . '/web/cart.php';
 });
 
-require __DIR__ . '/dashboard.php';
+require __DIR__ . '/web/dashboard.php';
 Route::get('not-found', function () {
     return view('front.error404');
 })->name('not-found');
