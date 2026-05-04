@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\product;
-use App\Models\Tag;
+use App\Repositories\Product\ProductRepository;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ProductsController extends Controller
@@ -15,14 +13,15 @@ class ProductsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function __construct()
-    {
-        // $this->authorizeResource(Product::class,'product');
-    }
+    public function __construct(
+        protected ProductService $productService,
+        protected ProductRepository $productRepository,
+        )
+    {}
 
     public function index()
     {
-        $products = Product::with(['category', 'store'])->paginate(5);
+        $products = $this->productRepository->getProductsForDashboard();
 
         return view('dashboard.products.index', compact('products'));
     }
@@ -32,10 +31,9 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        $product = new Product;
+       $data = $this->productRepository->getCreateFormData();
 
-        return view('dashboard.products.create', compact('product', 'categories'));
+        return view('dashboard.products.create', $data);
     }
 
     /**
@@ -53,11 +51,7 @@ class ProductsController extends Controller
             'slug' => Str::slug($request->name),
         ]);
 
-        $product = new Product;
-
-        $product->fill($request->all());
-        $product->store_id = Auth::user()->store_id;
-        $product->save();
+        $this->productService->storeFromDashboard($request->all());
 
         return redirect()->route('products.index')->with('success', 'Product created successfully');
     }
@@ -67,7 +61,7 @@ class ProductsController extends Controller
      */
     public function show(string $id)
     {
-        $product = Product::findOrFail($id);
+        $product = $this->productRepository->find($id);
 
         return view('dashboard.products.show', compact('product'));
     }
@@ -77,11 +71,9 @@ class ProductsController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Product::findOrFail($id);
-        $categories = Category::all();
-        $tags = implode(',', $product->tags()->pluck('name')->toArray());
+        $data = $this->productService->getEditData($id);
 
-        return view('dashboard.products.edite', compact('product', 'categories', 'tags'));
+        return view('dashboard.products.edit', $data);
     }
 
     /**
@@ -96,24 +88,7 @@ class ProductsController extends Controller
             'quantity' => ['required', 'integer', 'min:0'],
         ]);
 
-        $product = Product::findOrFail($id);
-        $product->update($request->except('tags'));
-
-        $tags = explode(',', $request->post('tags'));
-        $tag_ids = [];
-        $saved_tags = Tag::all();
-        foreach ($tags as $t_name) {
-            $slug = Str::slug($t_name);
-            $tag = $saved_tags->where('slug', $slug)->first();
-            if (! $tag) {
-                $tag = Tag::create([
-                    'name' => $t_name,
-                    'slug' => $slug,
-                ]);
-            }
-            $tag_ids[] = $tag->id;
-        }
-        $product->tags()->sync($tag_ids);
+       $this->productService->update($id, $request->all());
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
@@ -121,11 +96,9 @@ class ProductsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $product = Product::find(-2);
-
-        $product->delete();
+        $this->productRepository->deleteByID($id);
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully');
     }

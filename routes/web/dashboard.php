@@ -25,11 +25,6 @@ Route::group([
 
     Route::delete('/categories/{category}/force-delete', [CategoriesController::class, 'forceDelete'])
         ->name('categories.forceDelete');
-
-    Route::get('products/import', [ImportProductsController::class, 'create'])
-        ->name('products.import');
-    Route::post('products/import', [ImportProductsController::class, 'store']);
-
     Route::resources([
         'products' => ProductsController::class,
         'categories' => CategoriesController::class,

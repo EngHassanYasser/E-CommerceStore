@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\product;
+use App\Repositories\Product\ProductRepository;
 use App\Services\ProductService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 
 class ProductsController extends Controller
 {
-    public function __construct(protected ProductService $productService)
+    public function __construct(
+        protected ProductService $productService,
+        protected ProductRepository $productRepository,
+        )
     {
         $this->authorizeResource(product::class, 'product');
         $this->middleware('auth:sanctum')->except(['index', 'show']);
@@ -21,7 +25,7 @@ class ProductsController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->productService->getProductsForApi($request);
+        return $this->productRepository->getProductsForApi($request);
     }
 
     /**
@@ -45,16 +49,8 @@ class ProductsController extends Controller
             'compare_price' => 'nullable|numeric|gt:price',
         ]);
 
-        $Product = $this->productService->create($request->all());
+        $Product = $this->productRepository->store($request->all());
         return $Product;
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        return $this->productService->showModel($product);
     }
 
     /**
@@ -88,7 +84,7 @@ class ProductsController extends Controller
         if (! Auth::user()->tokenCan('product.delete')) {
             abort(403, 'Unauthorized');
         }
-        $product = $this->productService->deleteByID($id);
+        $product = $this->productRepository->deleteByID($id);
 
         return response()->json([
             'message' => 'Product deleted successfully',

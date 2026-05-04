@@ -1,9 +1,13 @@
 <?php
+
 namespace App\Repositories\Product;
+
+use App\Models\category;
 use App\Models\Product;
 use Illuminate\Support\Facades\Request;
 
-class ProductModeleRepository implements ProductRepository {
+class ProductModeleRepository implements ProductRepository
+{
     public function all()
     {
         return Product::all();
@@ -13,11 +17,7 @@ class ProductModeleRepository implements ProductRepository {
     {
         return Product::findOrFail($id);
     }
-    public function findModel(Product $product)
-    {
-        return $product;
-    }
-     public function findWithRelationsById($id, array $relations)
+    public function findWithRelationsById($id, array $relations)
     {
         return Product::with($relations)->findOrFail($id);
     }
@@ -26,18 +26,35 @@ class ProductModeleRepository implements ProductRepository {
     {
         return $product->load($relations);
     }
-    public function getProductsFroApi(Request $request) {
-            return Product::filter($request->query())->with('category', 'store')->paginate(10);
+    public function getProductsForApi(Request $request)
+    {
+        return Product::filter($request->query())->with('category', 'store')->paginate(10);
     }
-    public function create(array $data)
+    public function store(array $data)
     {
         return Product::create($data);
     }
-    public function update(Product $product, array $data) {
-         return $product->update($data);
+    public function update(Product $product, array $data)
+    {
+        return $product->update($data);
     }
     public function deleteByID($id)
     {
         return Product::destroy($id);
     }
+    public function getProductsWithRelations(array $relations)
+    {
+        return Product::with($relations)->paginate(10);
+    }
+        public function getCreateFormData()
+    {
+        return [
+            'product' => new Product(),
+            'categories' => category::all(),
+        ];
+    }
+    public function getProductsForDashboard()
+     {
+         return $this->getProductsWithRelations(['category', 'store']);
+     }
 }

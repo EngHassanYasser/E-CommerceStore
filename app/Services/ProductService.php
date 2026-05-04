@@ -1,34 +1,47 @@
 <?php
-
 namespace App\Services;
-
-use App\Models\Product;
 use App\Repositories\Product\ProductRepository;
-use Illuminate\Support\Facades\Request;
+use Arr;
+use CategoryService;
+use Illuminate\Support\Facades\Auth;
+use TagService;
 
 class ProductService
 {
     public function __construct(
-        protected ProductRepository $productRepository
+        protected ProductRepository $productRepository,
+        protected CategoryService $categoryRepository,
+        protected TagService $tagService,
     ) {}
-    public function getProductsForApi(Request $request)
+    public function storeFromDashboard(array $data)
     {
-        return $this->productRepository->getProductsFroApi($request);
+        $data['store_id'] = Auth::user()->store_id;
+        return $this->productRepository->store($data);
     }
-    public function create(array $data)
-    {
-        return $this->productRepository->create($data);
+    public function getEditData($id) {
+        $product = $this->productRepository->find($id);
+        return [
+        'product' => $product,
+        'categories' => $this->categoryRepository->all(),
+        'tags' => $product->tags->pluck('name')->implode(','),
+      ];
     }
-    public function showModel(Product $product)
+
+    public function update($id, array $data)
     {
-        return $this->productRepository->findModelWithRelations($product, ['category', 'store', 'tags']);
-    }
-    public function update(Product $product, array $data)
-    {
-        return $this->productRepository->update($product, $data);
-    }
-    public function deleteByID($id)
-    {
-        return $this->productRepository->deleteByID($id);
+        $product = $this->productRepository->find($id);
+
+        $product = $this->productRepository->update(
+            $product,
+            Arr::except($data, 'tags')
+        );
+
+        // 2. resolve tags
+        $tagIds = $this->tagService->resolveTags($data['tags'] ?? '');
+
+        // 3. sync relation
+        $product->tags()->sync($tagIds);
+
+        return $product;
     }
 }

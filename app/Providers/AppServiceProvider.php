@@ -10,9 +10,14 @@ use App\Repositories\Product\ProductRepository;
 use App\Services\CurrencyConverter;
 use App\Services\PaymentService;
 use App\Services\StripePaymentService;
+use CategoryModelRepository;
+use CategoryRepository;
+use CategoryService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
+use TagModelRepository;
+use TagRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -43,7 +48,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PaymentPaymentRepository::class, function ($app) {
             return new PaymentModelRepository();
         });
-       
+        $this->app->bind(CategoryService::class, function ($app) {
+            return new CategoryService($app->make(CategoryRepository::class));
+        });
+        
+        $this->app->bind(CategoryRepository::class, function ($app) {
+            return new CategoryModelRepository();
+        });
+        $this->app->bind(TagRepository::class, function ($app) {
+            return new TagModelRepository();
+        });
     }
 
     /**
