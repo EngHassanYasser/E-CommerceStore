@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\StoreProductRequest;
+use App\Http\Requests\Api\UpdateProductRequest;
 use App\Models\product;
 use App\Repositories\Product\ProductRepository;
 use App\Services\ProductService;
@@ -31,47 +33,19 @@ class ProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
         $this->authorize('create', product::class);
-
-        if (! $request->user()->tokenCan('product.create')) {
-            return response()->json([
-                'message' => 'Unauthorized',
-            ], 403);
-        }
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'status' => 'in:active,inactive',
-            'price' => 'required|numeric |min:0',
-            'compare_price' => 'nullable|numeric|gt:price',
-        ]);
-
-        $Product = $this->productRepository->store($request->all());
+        $Product = $this->productRepository->store($request->validated());
         return $Product;
     }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product)
     {
         $this->authorize('update', $product);
-
-        if (! $request->user()->tokenCan('product.update')) {
-            abort(403, 'Unauthorized');
-        }
-        $request->validate([
-            'name' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'status' => 'in:active,inactive',
-            'price' => 'required|numeric |min:0',
-            'compare_price' => 'nullable|numeric|gt:price',
-        ]);
-       return $this->productService->update($product, $request->all());
+       return $this->productService->update($product, $request->validated());
     }
 
     /**

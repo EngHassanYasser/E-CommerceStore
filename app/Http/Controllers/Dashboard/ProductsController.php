@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Web\StoreProductRequest;
+use App\Http\Requests\Web\UpdateProductRequest;
 use App\Repositories\Product\ProductRepository;
 use App\Services\ProductService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ProductsController extends Controller
@@ -39,19 +40,13 @@ class ProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'price' => ['required', 'numeric', 'min:0'],
-            'quantity' => ['required', 'integer', 'min:0'],
-        ]);
         $request->merge([
             'slug' => Str::slug($request->name),
         ]);
 
-        $this->productService->storeFromDashboard($request->all());
+        $this->productService->storeFromDashboard($request->validated());
 
         return redirect()->route('products.index')->with('success', 'Product created successfully');
     }
@@ -79,16 +74,9 @@ class ProductsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateProductRequest $request, string $id)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'price' => ['required', 'numeric', 'min:0'],
-            'quantity' => ['required', 'integer', 'min:0'],
-        ]);
-
-       $this->productService->update($id, $request->all());
+       $this->productService->update($id, $request->validated());
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
