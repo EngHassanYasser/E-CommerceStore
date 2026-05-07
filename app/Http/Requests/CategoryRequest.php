@@ -30,7 +30,7 @@ class CategoryRequest extends FormRequest
 
         return [
             'name' => [
-                'required', 'min:3', 'max:255', 'unique:categories,name,'.$id, 'filter',
+                'required', 'min:3', 'max:255', 'unique:categories,name,'.$id
             ],
             'parent_id' => [
                 'int', 'exists:categories,id',

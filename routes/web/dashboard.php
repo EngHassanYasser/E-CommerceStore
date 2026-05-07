@@ -1,10 +1,7 @@
 <?php
-
-use App\Http\Controllers\Dashboard\AdminController;
 use App\Http\Controllers\Dashboard\CategoriesController;
 use App\Http\Controllers\Dashboard\ProductsController;
 use App\Http\Controllers\Dashboard\ProfileController;
-use App\Http\Controllers\Dashboard\RoleController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\support\Facades\Route;
 
@@ -27,9 +24,5 @@ Route::group([
     Route::resources([
         'products' => ProductsController::class,
         'categories' => CategoriesController::class,
-        'roles' => RoleController::class,
     ]);
-    Route::resource('dashboard/admin', AdminController::class);
-    Route::get('dashboard/admin/trash', [AdminController::class, 'trash'])->name('admin.trash');
-
 });

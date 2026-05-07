@@ -78,7 +78,7 @@ class CategoriesController extends Controller
      */
     public function update(CategoryRequest $request, string $id)
     {
-        $data = $request->except('image');
+        $data = $request->validated();
 
         $this->categoryService->update($request, $id, $data);
 

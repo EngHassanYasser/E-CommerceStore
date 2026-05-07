@@ -18,19 +18,5 @@ return [
         'route' => 'products.index',
         'title' => 'products',
         'ability' => 'products.view',
-    ],
-    [
-        'icon' => 'nav-icon fas fa-user-shield',
-        'route' => 'roles.index',
-        'title' => 'Roles',
-        'active' => 'dashboard.roles.*',
-        'ability' => 'roles.view',
-    ],
-    [
-        'icon' => 'nav-icon fas fa-users-cog',
-        'route' => 'admin.index',
-        'title' => 'Admins',
-        'active' => 'dashboard.admins.*',
-        'ability' => 'admins.view',
-    ],
+    ]
 ];

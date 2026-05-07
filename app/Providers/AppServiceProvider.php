@@ -1,9 +1,6 @@
 <?php
 
 namespace App\Providers;
-
-use App\Repositories\Admin\AdminModelRepository as AdminAdminModelRepository;
-use App\Repositories\Admin\AdminRepository;
 use App\Repositories\Cart\CartModelRepository;
 use App\Repositories\Cart\CartRepository;
 use App\Repositories\Category\CategoryModelRepository;
@@ -14,16 +11,12 @@ use App\Repositories\Payment\PaymentModelRepository;
 use App\Repositories\Payment\PaymentRepository;
 use App\Repositories\Product\ProductModelRepository;
 use App\Repositories\Product\ProductRepository;
-use App\Repositories\Role\RoleModelRepository as RoleRoleModelRepository;
-use App\Repositories\Role\RoleRepository;
 use App\Repositories\Tag\TagModelRepository as TagTagModelRepository;
 use App\Repositories\Tag\TagRepository as TagTagRepository;
 use App\Services\CurrencyConverter;
 use App\Services\CurrencyConverterService as CurrencyConverterService;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use RoleModelRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -44,8 +37,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PaymentRepository::class, PaymentModelRepository::class);
         $this->app->bind(CategoryRepository::class,CategoryModelRepository::class);
         $this->app->bind(TagTagRepository::class, TagTagModelRepository::class);
-        $this->app->bind(AdminRepository::class, AdminAdminModelRepository::class);
-        $this->app->bind(RoleRepository::class,RoleRoleModelRepository::class);
         $this->app->bind(CheckoutRepository::class,CheckoutModelRepository::class);
     }
 
@@ -54,11 +45,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
-        validator::extend('filter', function ($attribute, $value, $parameters, $validator) {
-            return $value != 'laravel';
-        }, 'The value of :attribute cannot be :value app service provider');
-
         Paginator::useBootstrap();
     }
 }

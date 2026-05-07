@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Models\product;
-use App\Models\User;
 
 class ProductPolicy extends ModelPolicy
 {

@@ -7,7 +7,6 @@
 @endsection
 
  <base href="/public"> @section('content')
- 
  <form action="{{URL::current()}}" method="get" class="d-flex justify-content-between mb-4">
     <input type="text" name="name"  value = "{{ request('name') }}" placeholder="name" class="mx-2"/>
     <select name="status" class="form-control mx-2" >
