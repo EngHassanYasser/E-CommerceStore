@@ -3,8 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Gate;
-
 class CategoryRequest extends FormRequest
 {
     /**
@@ -12,11 +10,7 @@ class CategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (request()->route('category')) {
-            return Gate::allows('categories.update');
-        }
-
-        return Gate::allows('categories.create');
+        return true;
     }
 
     /**
@@ -33,7 +27,7 @@ class CategoryRequest extends FormRequest
                 'required', 'min:3', 'max:255', 'unique:categories,name,'.$id
             ],
             'parent_id' => [
-                'int', 'exists:categories,id',
+                'nullable','int', 'exists:categories,id',
             ],
             'image' => [
                 'image', 'dimensions:min_length:100,min_height:100',
@@ -42,9 +36,4 @@ class CategoryRequest extends FormRequest
 
         ];
     }
-    //    public function messages() {
-    //     return [
-    //         'name.required'=>'Category Name is required',
-    //     ];
-    //    }
 }

@@ -7,14 +7,12 @@ use App\Http\Requests\Api\StoreProductRequest;
 use App\Http\Requests\Api\UpdateProductRequest;
 use App\Models\product;
 use App\Repositories\Product\ProductRepository;
-use App\Services\ProductService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 
 class ProductsController extends Controller
 {
     public function __construct(
-        protected ProductService $productService,
         protected ProductRepository $productRepository,
         )
     {
@@ -45,7 +43,7 @@ class ProductsController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         $this->authorize('update', $product);
-       return $this->productService->update($product, $request->validated());
+       return $this->productRepository->update($product, $request->validated());
     }
 
     /**

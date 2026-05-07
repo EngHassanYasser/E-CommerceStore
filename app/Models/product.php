@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\ProductFlag;
 use App\Models\Scopes\StoreScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,7 +45,10 @@ class Product extends Model
             'id'
         );
     }
-
+    public function flags() {
+        return $this->belongsToMany(Flag::class,'flag_products');
+    }
+    
     protected static function booted()
     {
 

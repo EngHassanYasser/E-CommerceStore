@@ -11,8 +11,6 @@ use App\Repositories\Payment\PaymentModelRepository;
 use App\Repositories\Payment\PaymentRepository;
 use App\Repositories\Product\ProductModelRepository;
 use App\Repositories\Product\ProductRepository;
-use App\Repositories\Tag\TagModelRepository as TagTagModelRepository;
-use App\Repositories\Tag\TagRepository as TagTagRepository;
 use App\Services\CurrencyConverter;
 use App\Services\CurrencyConverterService as CurrencyConverterService;
 use Illuminate\Pagination\Paginator;
@@ -36,7 +34,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CurrencyConverterService::class,CurrencyConverterService::class);
         $this->app->bind(PaymentRepository::class, PaymentModelRepository::class);
         $this->app->bind(CategoryRepository::class,CategoryModelRepository::class);
-        $this->app->bind(TagTagRepository::class, TagTagModelRepository::class);
         $this->app->bind(CheckoutRepository::class,CheckoutModelRepository::class);
     }
 

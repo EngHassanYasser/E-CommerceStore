@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories\Product;
 
 use App\Models\Product;
@@ -13,6 +14,7 @@ interface ProductRepository
     public function getProductsForApi(Request $request);
     public function store(array $data);
     public function update(Product $product, array $data);
+    public function updateWithTags(int $id, array $data): Product;
     public function deleteByID($id);
     public function getProductsWithRelations(array $relations);
     public function getCreateFormData();

@@ -26,6 +26,10 @@ class UpdateProductRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
             'quantity' => ['required', 'integer', 'min:0'],
+            'status' =>['string'],
+            'tags'=>[],
+            'compare_price'=>[],
+            'flags'=>[],
         ];
     }
 }

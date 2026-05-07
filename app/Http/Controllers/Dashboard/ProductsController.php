@@ -33,7 +33,6 @@ class ProductsController extends Controller
     public function create()
     {
        $data = $this->productRepository->getCreateFormData();
-
         return view('dashboard.products.create', $data);
     }
 
@@ -45,9 +44,7 @@ class ProductsController extends Controller
         $request->merge([
             'slug' => Str::slug($request->name),
         ]);
-
         $this->productService->storeFromDashboard($request->validated());
-
         return redirect()->route('products.index')->with('success', 'Product created successfully');
     }
 
@@ -67,7 +64,6 @@ class ProductsController extends Controller
     public function edit(string $id)
     {
         $data = $this->productService->getEditData($id);
-
         return view('dashboard.products.edit', $data);
     }
 
@@ -76,7 +72,7 @@ class ProductsController extends Controller
      */
     public function update(UpdateProductRequest $request, string $id)
     {
-       $this->productService->update($id, $request->validated());
+       $this->productRepository->updateWithTags($id, $request->validated());
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }

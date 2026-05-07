@@ -80,6 +80,34 @@ namespace App\Models{
 namespace App\Models{
 /**
  * @property int $id
+ * @property string $name
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Product> $products
+ * @property-read int|null $products_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Flag newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Flag newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Flag query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Flag whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Flag whereName($value)
+ */
+	class Flag extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $product_id
+ * @property int $flag_id
+ * @method static \Illuminate\Database\Eloquent\Builder|FlagProduct newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FlagProduct newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FlagProduct query()
+ * @method static \Illuminate\Database\Eloquent\Builder|FlagProduct whereFlagId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FlagProduct whereProductId($value)
+ */
+	class FlagProduct extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * @property int $id
  * @property int $store_id
  * @property int|null $user_id
  * @property string $payment_method

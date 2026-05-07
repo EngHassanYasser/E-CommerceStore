@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('admins', function (Blueprint $table) {
-            $table->foreignId('store_id')->constrained()->default(1);
+        Schema::create('flags', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
         });
     }
 
@@ -21,8 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('admins', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('store_id');
-        });
+        Schema::dropIfExists('flags');
     }
 };

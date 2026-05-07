@@ -26,6 +26,8 @@ class StoreProductRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
             'quantity' => ['required', 'integer', 'min:0'],
+            'flags'=>['nullable'],
+            'tags'=>['nullable'],
         ];
     }
 }
