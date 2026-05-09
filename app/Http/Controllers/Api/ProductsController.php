@@ -6,16 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreProductRequest;
 use App\Http\Requests\Api\UpdateProductRequest;
 use App\Models\product;
-use App\Repositories\Product\ProductRepository;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
     public function __construct(
-        protected ProductRepository $productRepository,
+        protected ProductService $productService
     ) {
-        
+
         $this->middleware('auth:sanctum')->except(['index', 'show']);
     }
 
@@ -24,7 +23,7 @@ class ProductsController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->productRepository->getProductsForApi($request);
+        return $this->productService->getProductsForApi($request->query());
     }
 
     /**
@@ -32,15 +31,18 @@ class ProductsController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $Product = $this->productRepository->store($request->validated());
-        return $Product;
+        $data = $request->validated();
+
+        return $this->productService->store($data);
     }
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        return $this->productRepository->update($product, $request->validated());
+        $data = $request->validated();
+
+        return $this->productService->update($product, $data);
     }
 
     /**
@@ -48,8 +50,7 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
-        $product = $this->productRepository->deleteByID($id);
-
+        $product = $this->productService->deleteByID($id);
         return response()->json([
             'message' => 'Product deleted successfully',
             'product' => $product,

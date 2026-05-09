@@ -1,29 +1,24 @@
 <?php
+
 namespace App\Services;
+
+use App\Models\Category;
 use App\Repositories\Category\CategoryRepository;
 use Illuminate\Support\Facades\Storage;
 
-class CategoryService extends FileService
+class CategoryService
 {
     public function __construct(protected CategoryRepository $categoryRepository) {}
-
-    public function store($request)
+    public function store(array $data)
     {
-        $data['image'] = $this->uploadImages($request);
-        $data = $request->except('image');
-
-        $this->categoryRepository->create($data);
+        $this->categoryRepository->store($data);
     }
-    public function update($request, $id, $data)
+    public function findByID($id)
     {
-        $category = $this->categoryRepository->findByID($id);
-        $old_image = $category->image;
-
-        $data['image'] = $this->uploadImages($request);
-
-        if ($old_image && asset($data['image'])) {
-            Storage::disk('public')->delete(paths: 'images_folder/' . $old_image);
-        }
+        return Category::findOrFail($id);
+    }
+    public function update($category, array $data)
+    {
         $category->update($data);
     }
     public function destroy($id)
@@ -40,5 +35,23 @@ class CategoryService extends FileService
             $this->categoryRepository->foreDelete($category);
             Storage::disk('public')->delete('images_folder/' . $category->image);
         }
+    }
+    public function getAll()
+    {
+        return $this->categoryRepository->getAll();
+    }
+    public function getEditeData($id)
+    {
+        return [
+            'category' => $this->categoryRepository->findByID($id),
+            'parents' => $this->categoryRepository->getPossibleParents($id)
+        ];
+    }
+    public function findTrashesForDashboard()
+    {
+        return $this->categoryRepository->findTrashesForDashboard();
+    }
+    public function restore($id) {
+        return $this->categoryRepository->restore($id);
     }
 }

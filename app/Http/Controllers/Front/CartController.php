@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\StoreCartRequest;
+use App\Http\Requests\Web\UpdateCartRequest;
 use App\Models\Cart;
-use App\Repositories\Cart\CartRepository;
-use Illuminate\Http\Request;
+use App\Services\CartService;
 
 class CartController extends Controller
 {
@@ -14,14 +14,12 @@ class CartController extends Controller
      * Display a listing of the resource.
      */
 
-    public function __construct(protected CartRepository $cartepository)
-    {
-    }
+    public function __construct(protected CartService $cartService ) {}
 
     public function index(Cart $cart)
     {
-        $total = $this->cartepository->total();
-        return view('front.cart', compact('cart','total'));
+        $total = $this->cartService->total();
+        return view('front.cart', compact('cart', 'total'));
     }
 
     /**
@@ -29,11 +27,9 @@ class CartController extends Controller
      */
     public function store(StoreCartRequest $request)
     {
-        $request->validated();
-        
-        $product_id=$request->post('product_id');
+        $data = $request->validated();
 
-        $this->cartepository->add($product_id, $request->post('quantity'));
+        $this->cartService->store($data);
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -47,12 +43,10 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateCartRequest $request, $id)
     {
-        $request->validate([
-            'quantity' => ['required', 'int', 'min:1'],
-        ]);
-        $this->cartepository->update($id, $request->post('quantity'));
+        $data = $request->validated();
+        $this->cartService->update($id, $data['quantity']);
     }
 
     /**
@@ -60,7 +54,7 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-       $this->cartepository->delete($id);
+       $this->cartService->destroy($id);
 
         return [
             'message' => 'item deleted successfully',

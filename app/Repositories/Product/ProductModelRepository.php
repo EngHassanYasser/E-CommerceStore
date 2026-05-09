@@ -29,9 +29,9 @@ class ProductModelRepository implements ProductRepository
     {
         return $product->load($relations);
     }
-    public function getProductsForApi(Request $request)
+    public function getProductsForApi(array $filters)
     {
-        return Product::filter($request->query())->with('category', 'store')->paginate(10);
+        return Product::filter($filters)->with('category', 'store')->paginate(10);
     }
     public function store(array $data)
     {
@@ -62,15 +62,6 @@ class ProductModelRepository implements ProductRepository
     public function getProductsWithRelations(array $relations)
     {
         return Product::with($relations)->paginate(10);
-    }
-    public function getCreateFormData()
-    {
-        return [
-            'product' => new Product(),
-            'categories' => category::all(),
-            'tags' => '',
-            'flags' => Flag::all(),
-        ];
     }
     public function getProductsForDashboard()
     {

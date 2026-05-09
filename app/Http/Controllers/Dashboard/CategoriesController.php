@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\category;
-use App\Repositories\Category\CategoryRepository;
 use App\Services\CategoryService;
+use App\Services\FileService;
 use Exception;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 
@@ -16,11 +16,11 @@ class CategoriesController extends Controller
 {
     public function __construct(
         protected CategoryService $categoryService,
-        protected CategoryRepository $categoryRepository
+        protected FileService $fileService
     ) {}
     public function index(Request $request)
     {
-        $categories = $this->categoryRepository->getAll();
+        $categories = $this->categoryService->getAll();
         return view('dashboard.categories.index', compact('categories'));
     }
 
@@ -29,9 +29,10 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        $data = $this->categoryRepository->getCreateData();
-
-        return view('dashboard.categories.create', $data);
+        return view('dashboard.categories.create', [
+            'category' => new Category,
+            'parents' => Category::all(),
+        ]);
     }
 
     /**
@@ -39,15 +40,18 @@ class CategoriesController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $request->validate(rules: Category::rules());
 
-        $request->merge([
-            'slug' => str::slug($request->post('name')),
-        ]);
+        $data = $request->validated();
+        $file = $request->file('image');
 
-        $this->categoryService->store($request);
+        $data['slug'] = Str::slug($data['name']);
+        if ($file) {
+            $data['image'] = $this->fileService->upload($file);
+        }
+        $this->categoryService->store($data);
 
-        return Redirect::route('categories.index')->with('success', 'Category Added Successfully');
+        return redirect()->route('categories.index')
+            ->with('success', 'Category Added Successfully');
     }
 
     /**
@@ -55,7 +59,6 @@ class CategoriesController extends Controller
      */
     public function show(Category $category)
     {
-
         return view('dashboard.categories.show', compact('category'));
     }
 
@@ -65,26 +68,32 @@ class CategoriesController extends Controller
     public function edit(string $id)
     {
         try {
-            $data = $this->categoryRepository->getEditeData($id);
-            return view('dashboard.categories.edite',$data);
+            $data = $this->categoryService->getEditeData($id);
+            return view('dashboard.categories.edite', $data);
         } catch (Exception $e) {
             throw $e;
             return redirect()->route('categories.index')->with('info', 'category not found');
         }
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(CategoryRequest $request, string $id)
+    public function update(CategoryRequest $request, $id)
     {
         $data = $request->validated();
+        $file = $request->file('image');
 
-        $this->categoryService->update($request, $id, $data);
+        DB::transaction(function () use ($id, $data, $file) {
 
-        return redirect()->route('categories.index')->with('success', 'category updated successfully');
+            $category = $this->categoryService->findByID($id);
+
+            $this->categoryService->update($category, $data);
+
+            if ($file) {
+                $this->fileService->update($file, $category->image);
+            }
+        });
+
+        return redirect()->route('categories.index')
+            ->with('success', 'Category Updated Successfully');
     }
-
     /**
      * Remove the specified resource from storage.
      */
@@ -92,19 +101,19 @@ class CategoriesController extends Controller
     {
         $this->categoryService->destroy($id);
 
-        return Redirect::route('categories.index')->with('success', 'category deleted successfully');
+        return redirect()->route('categories.index')->with('success', 'category deleted successfully');
     }
 
     public function trash()
     {
-        $categories = $this->categoryRepository->findTrashes();
+        $categories = $this->categoryService->findTrashesForDashboard();
 
         return view('dashboard.categories.trash', compact('categories'));
     }
 
     public function restore($id)
     {
-        $this->categoryRepository->restore($id);
+        $this->categoryService->restore($id);
 
         return redirect()->route('categories.trash')->with('success', 'category restored successfully');
     }

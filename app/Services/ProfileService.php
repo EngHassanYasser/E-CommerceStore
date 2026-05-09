@@ -1,7 +1,8 @@
 <?php
-
-use Illuminate\Http\Request;
+namespace App\Services;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\Profile\ProfileRepository;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Languages;
 
@@ -16,13 +17,12 @@ class ProfileService
             'locales' => Languages::getNames()
         ];
     }
-    public function destroy(Request $request)
+    public function destroy(User $user)
     {
-        Auth::logout();
-
-        $this->profileRepository->delete($request->user());
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $this->profileRepository->delete($user);
+    }
+    public function update($user, $data)
+    {
+        $this->profileRepository->update($user, $data);
     }
 }

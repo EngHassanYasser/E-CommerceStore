@@ -52,7 +52,7 @@ class AccessTokenService
             return false;
         }
 
-        $accessToken->delete();
+        $accessToken->delete(); 
 
         return true;
     }

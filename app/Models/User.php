@@ -64,7 +64,7 @@ class User extends Authenticatable
 
     public function profile()
     {
-        return $this->hasOne(profile::class)->withDefault();
+        return $this->hasOne(Profile::class)->withDefault();
     }
 
     public function setProviderTokenAttribute($value)

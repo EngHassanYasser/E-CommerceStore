@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories\Category;
 
 use App\Models\category;
@@ -13,46 +14,40 @@ class CategoryModelRepository implements CategoryRepository
             ->select('categories.*')->withCount('products')
             ->paginate(5);
     }
-    public function getCreateData()
+    public function findByID($id)
     {
-        return [
-            'category' => new Category,
-            'parents' =>Category::all(),
-        ];
-    }
-    public function create(array $data) {}
-    public function getEditeData($id)
-    {
-        $category = category::findOrFail($id);
-        $parents = category::where('id', '<>', value: $id)
-            ->where(function ($request) {
-                $request->where('parent_id', '<>', 'id')->orWhereNull('parent_id');
-            })->get();
-
-        return [
-            'category' => $category,
-            'parents' => $parents
-        ];
-    }
-    public function findByID($id) {
         return category::findOrFail($id);
     }
-    public function update($category,$data) {
-         $category->update($data);
+    public function store($data) {
+        return  Category::create($data);
+
     }
-    public function destroy($id) {
+    public function update($category, $data)
+    {
+        $category->update($data);
+    }
+    public function destroy($id)
+    {
         return category::destroy($id);
     }
-    public function restore($id) {
+    public function restore($id)
+    {
         return Category::onlyTrashed()->findOrFail($id)->restore();
     }
-    public function findTrashes() {
+    public function findTrashesForDashboard()
+    {
         return Category::onlyTrashed()->paginate();
     }
-    public function findTrash($id) {
-       return Category::onlyTrashed()->findOrFail($id);
+    public function findTrash($id)
+    {
+        return Category::onlyTrashed()->findOrFail($id);
     }
-    public function foreDelete($category) {
-         $category->forceDelete();
+    public function foreDelete($category)
+    {
+        $category->forceDelete();
+    }
+    public function getPossibleParents($id)
+    {
+        return Category::where('id', '<>', $id)->get();
     }
 }

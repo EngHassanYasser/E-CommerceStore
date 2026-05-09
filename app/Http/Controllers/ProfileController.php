@@ -5,18 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use ProfileRepository;
-use ProfileService;
+use App\Services\ProfileService;
 
 class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
      */
-    public function __construct(protected ProfileRepository $profileRepository
-    ,protected ProfileService $profileService){}
+    public function __construct(
+        protected ProfileService $profileService
+    ) {}
     public function edit(Request $request): View
     {
         return view('profile.edit', [
@@ -29,22 +29,22 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-       $this->profileRepository->update($request->user(),$request->validated());
-       
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        $this->profileService->update($request->user(), $request->validated());
+
+        return redirect()->route('profile.edite')->with('status', 'profile-updated');
     }
 
     /**
      * Delete the user's account.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request)
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
+        $user = $request->user();
 
-        $this->profileService->destroy($request);
-        
-        return Redirect::to('/');
+        $this->profileService->destroy($user);
+
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
     }
 }

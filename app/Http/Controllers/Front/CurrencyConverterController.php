@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Web\CurrencyConverterRequest;
 use App\Services\CurrencyConverterService;
-use Illuminate\Http\Request;
 
 class CurrencyConverterController extends Controller
 {
     public function __construct(protected CurrencyConverterService $currencyConverterService) {}
-    public function store(Request $request)
+    public function store(CurrencyConverterRequest $request)
     {
-       $data= $request->validate([
-            'currency_code' => 'required|string|size:3',
-        ]);
+       $data= $request->validated();
 
        $this->currencyConverterService->store($data);
        

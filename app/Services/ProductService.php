@@ -1,10 +1,10 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\Flag;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Product\ProductRepository;
-use Arr;
 use Illuminate\Support\Facades\Auth;
 
 class ProductService
@@ -18,14 +18,47 @@ class ProductService
         $data['store_id'] = Auth::user()->store_id;
         return $this->productRepository->store($data);
     }
-    public function getEditData($id) {
+    public function getEditData($id)
+    {
         $product = $this->productRepository->find($id);
         return [
-        'productFlags'=> $product->flags()->pluck('id')->toArray(),
-        'product' => $product,
-        'categories' => $this->categoryRepository->getAll(),
-        'tags' => $product->tags->pluck('name')->implode(','),
-        'flags'=>Flag::all(),
-      ];
+            'productFlags' => $product->flags()->pluck('id')->toArray(),
+            'product' => $product,
+            'categories' => $this->categoryRepository->getAll(),
+            'tags' => $product->tags->pluck('name')->implode(','),
+            'flags' => Flag::all(),
+        ];
+    }
+    public function getProductsForApi(array $filters)
+    {
+        return $this->productRepository->getProductsForApi($filters);
+    }
+    public function store($data)
+    {
+        return $this->productRepository->store($data);
+    }
+    public function update($product, $data)
+    {
+        return $this->productRepository->update($product, $data);
+    }
+    public function deleteByID($id)
+    {
+        return $this->productRepository->deleteByID($id);
+    }
+    public function getActiveProducts()
+    {
+        return $this->productRepository->getActiveProducts();
+    }
+    public function getProductsForDashboard()
+    {
+        return $this->productRepository->getProductsForDashboard();
+    }
+    public function find($id)
+    {
+        return $this->productRepository->find($id);
+    }
+    public function updateWithTags($id, $data)
+    {
+        return $this->productRepository->updateWithTags($id, $data);
     }
 }

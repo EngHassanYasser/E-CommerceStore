@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\StoreProductRequest;
 use App\Http\Requests\Web\UpdateProductRequest;
-use App\Repositories\Product\ProductRepository;
+use App\Models\Category;
+use App\Models\Flag;
+use App\Models\Product;
 use App\Services\ProductService;
 use Illuminate\Support\Str;
 
@@ -15,14 +17,12 @@ class ProductsController extends Controller
      * Display a listing of the resource.
      */
     public function __construct(
-        protected ProductService $productService,
-        protected ProductRepository $productRepository,
-        )
-    {}
+        protected ProductService $productService
+    ) {}
 
     public function index()
     {
-        $products = $this->productRepository->getProductsForDashboard();
+        $products = $this->productService->getProductsForDashboard();
 
         return view('dashboard.products.index', compact('products'));
     }
@@ -32,8 +32,12 @@ class ProductsController extends Controller
      */
     public function create()
     {
-       $data = $this->productRepository->getCreateFormData();
-        return view('dashboard.products.create', $data);
+        return view('dashboard.products.create',[
+            'product' => new Product(),
+            'categories' => Category::all(),
+            'tags' => '',
+            'flags' => Flag::all(),
+        ]);
     }
 
     /**
@@ -53,7 +57,7 @@ class ProductsController extends Controller
      */
     public function show(string $id)
     {
-        $product = $this->productRepository->find($id);
+        $product = $this->productService->find($id);
 
         return view('dashboard.products.show', compact('product'));
     }
@@ -72,7 +76,7 @@ class ProductsController extends Controller
      */
     public function update(UpdateProductRequest $request, string $id)
     {
-       $this->productRepository->updateWithTags($id, $request->validated());
+        $this->productService->updateWithTags($id, $request->validated());
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
@@ -82,7 +86,7 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
-        $this->productRepository->deleteByID($id);
+        $this->productService->deleteByID($id);
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully');
     }

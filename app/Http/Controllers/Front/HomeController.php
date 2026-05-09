@@ -3,17 +3,19 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\Cart\CartRepository;
-use App\Repositories\Product\ProductRepository;
+use App\Services\CartService;
+use App\Services\ProductService;
 
 class HomeController extends Controller
 {
-    public function __construct(protected ProductRepository $productRepository
-    ,protected CartRepository $cartRepository){}
+    public function __construct(
+        protected ProductService $productService,
+        protected CartService $cartService
+    ){}
     public function index()
     {
-        $products = $this->productRepository->getActiveProducts();
-        $cart_count = $this->cartRepository->count();
+        $products = $this->productService->getActiveProducts();
+        $cart_count = $this->cartService->count();
         return view('front.home', compact('products','cart_count'));
 
     }

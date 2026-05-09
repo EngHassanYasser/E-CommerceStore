@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\ProductFlag;
 use App\Models\Scopes\StoreScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,7 +30,7 @@ class Product extends Model
 
     public function store()
     {
-        return $this->belongsTo(store::class);
+        return $this->belongsTo(Store::class);
     }
 
     public function tags()
@@ -54,7 +53,7 @@ class Product extends Model
 
         static::addGlobalScope('store', new StoreScope);
 
-        static::creating(function (product $product) {
+        static::creating(function (Product $product) {
             $product->slug = Str::slug($product->name);
         });
     }

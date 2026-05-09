@@ -6,13 +6,13 @@ use App\Exceptions\InvalidOrderException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\StoreCheckoutRequest;
 use App\Models\Cart;
-use App\Repositories\Checkout\CheckoutRepository;
+use App\Services\CheckoutService;
 use Symfony\Component\Intl\Countries;
 
 class CheckoutController extends Controller
 {
     public function __construct(
-        protected CheckoutRepository $checkoutRepository
+        protected CheckoutService $checkoutService
     ){}
     public function create(Cart $cart)
     {
@@ -28,10 +28,9 @@ class CheckoutController extends Controller
 
     public function store(StoreCheckoutRequest $request, Cart $cart)
     {
-        // dd($request->alll(),$request->validated());
        $data= $request->validated();
 
-      $order= $this->checkoutRepository->Store($data,$cart);
+      $order= $this->checkoutService->Store($data,$cart);
      return redirect()->route('orders.payment.create', $order->id);
     }
 }
