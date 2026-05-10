@@ -1,8 +1,13 @@
 <?php
 namespace App\Repositories\Payment;
 use App\Models\Payment;
+use App\Repositories\BaseModelRepository;
 
-class PaymentModelRepository implements PaymentRepository {
+class PaymentModelRepository extends BaseModelRepository implements PaymentRepository {
+    public function __construct(Payment $payment)
+    {
+       parent::__construct($payment);
+    }
     public function create($order_id,$paymentIntent) {
         Payment::create([
                 'order_id' => $order_id,
@@ -20,8 +25,5 @@ class PaymentModelRepository implements PaymentRepository {
             'status' => 'completed',
             'transaction_data' =>json_encode($paymentIntent),
         ]);
-    }
-    public function find($id) {
-        return Payment::where('order_id', $id)->first();
     }
 }

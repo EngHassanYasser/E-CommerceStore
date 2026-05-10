@@ -5,16 +5,20 @@ namespace App\Repositories\Order;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Repositories\BaseModelRepository;
 use App\Repositories\Cart\CartRepository;
 
-class OrderModelRepository implements OrderRepository
+class OrderModelRepository extends BaseModelRepository implements OrderRepository
 {
     public function __construct(
         protected OrderRepository $orderRepository,
-        protected CartRepository $cartRepository
-    ) {}
+        protected CartRepository $cartRepository,
+        Order $order
+    ) {
+        parent::__construct($order);
+    }
 
-    public function store($user_id, $data, Cart $cart)
+    public function StoreOrder($user_id, $data, Cart $cart)
     {
         return  Order::create([
             'user_id' => $user_id,

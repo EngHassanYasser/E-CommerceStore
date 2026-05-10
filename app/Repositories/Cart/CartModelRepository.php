@@ -4,19 +4,22 @@ namespace App\Repositories\Cart;
 
 use App\Models\Cart;
 use App\Models\Product;
+use App\Repositories\BaseModelRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
-class CartModelRepository implements CartRepository
+class CartModelRepository extends BaseModelRepository implements CartRepository
 {
     protected $items;
 
-    public function __construct()
+    public function __construct(Cart $cart)
     {
+        parent::__construct($cart);
+
         $this->items = collect([]);
     }
 
-    public function get(): Collection
+    public function all(): Collection
     {
         if (! $this->items->count()) {
             $this->items = Cart::with('product')->get();
@@ -25,7 +28,7 @@ class CartModelRepository implements CartRepository
         return $this->items;
     }
 
-    public function add($id, $quantity = 1)
+    public function store($id, $quantity = 1)
     {
         $product = Product::findOrFail($id);
 
@@ -55,15 +58,9 @@ class CartModelRepository implements CartRepository
             ]);
     }
 
-    public function delete($id)
+    public function empty($id)
     {
-        Cart::where('id', '=', $id)
-            ->delete();
-    }
-
-    public function empty()
-    {
-        Cart::query()->delete();
+    Cart::where('user_id', $id)->delete();
     }
 
     public function total(): float

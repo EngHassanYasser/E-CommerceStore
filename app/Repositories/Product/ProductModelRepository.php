@@ -2,33 +2,22 @@
 
 namespace App\Repositories\Product;
 
-use App\Models\category;
-use App\Models\Flag;
 use App\Models\Product;
 use App\Models\Tag;
+use App\Repositories\BaseModelRepository;
 use Arr;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Str;
 
-class ProductModelRepository implements ProductRepository
+class ProductModelRepository extends BaseModelRepository implements ProductRepository
 {
-    public function all()
-    {
-        return Product::all();
+    public function construct(Product $product) {
+        parent::__construct($product);
     }
-    public function find($id)
-    {
-        return Product::with('flags')->findOrFail($id);
-    }
-    public function findWithRelationsById($id, array $relations)
-    {
-        return Product::with($relations)->findOrFail($id);
-    }
-    public function findModelWithRelations(Product $product, array $relations)
-    {
-        return $product->load($relations);
-    }
+    // public function find($id)
+    // {
+    //     return Product::with('flags')->findOrFail($id);
+    // }
     public function getProductsForApi(array $filters)
     {
         return Product::filter($filters)->with('category', 'store')->paginate(10);
@@ -44,7 +33,7 @@ class ProductModelRepository implements ProductRepository
         });
     }
 
-    public function update(Product $product, array $data)
+    public function update($product, array $data)
     {
         return DB::transaction(function () use ($product, $data) {
             $product->update($data);
@@ -55,18 +44,10 @@ class ProductModelRepository implements ProductRepository
             return $product->fresh();
         });
     }
-    public function deleteByID($id)
-    {
-        return Product::destroy($id);
-    }
-    public function getProductsWithRelations(array $relations)
-    {
-        return Product::with($relations)->paginate(10);
-    }
-    public function getProductsForDashboard()
-    {
-        return $this->getProductsWithRelations(['category', 'store']);
-    }
+    // public function getProductsForDashboard()
+    // {
+    //     return $this->getPaginatedWithRelations(['category', 'store']);
+    // }
 
     public function getActiveProducts()
     {

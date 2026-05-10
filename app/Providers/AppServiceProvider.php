@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Providers;
+
+use App\Repositories\BaseModelRepository;
+use App\Repositories\BaseRepository;
 use App\Repositories\Cart\CartModelRepository;
 use App\Repositories\Cart\CartRepository;
 use App\Repositories\Category\CategoryModelRepository;
