@@ -48,7 +48,8 @@ class ProductsController extends Controller
         $request->merge([
             'slug' => Str::slug($request->name),
         ]);
-        $this->productService->storeFromDashboard($request->validated());
+        $data  =$request->validated();
+        $this->productService->storeFromDashboard($data);
         return redirect()->route('products.index')->with('success', 'Product created successfully');
     }
 
@@ -76,7 +77,8 @@ class ProductsController extends Controller
      */
     public function update(UpdateProductRequest $request, string $id)
     {
-        $this->productService->updateWithTags($id, $request->validated());
+        $data=$request->validated();
+        $this->productService->updateWithTags($id,$data);
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }

@@ -43,8 +43,8 @@ class CategoriesController extends Controller
 
         $data = $request->validated();
         $file = $request->file('image');
-
         $data['slug'] = Str::slug($data['name']);
+        
         if ($file) {
             $data['image'] = $this->fileService->upload($file);
         }

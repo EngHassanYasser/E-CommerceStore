@@ -51,5 +51,8 @@ class CategoryService extends BaseService
     {
         return $this->categoryRepository->findTrashesForDashboard();
     }
+    public function restore($id) {
+        return $this->categoryRepository->restore($id);
+    }
    
 }

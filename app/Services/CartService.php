@@ -22,4 +22,7 @@ class CartService extends BaseService
     public function count() {
         return $this->cartepository->count();
     }
+    public function delete($id) {
+        return $this->cartepository->deleteByID($id);
+    }
 }
