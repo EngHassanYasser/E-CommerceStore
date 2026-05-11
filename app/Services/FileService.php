@@ -4,7 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
 
-class FileService
+class FileService extends BaseService
 {
     public function upload($file, $folder = 'images_folder')
     {

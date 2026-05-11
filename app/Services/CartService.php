@@ -1,13 +1,16 @@
 <?php
 namespace App\Services;
+
 use App\Repositories\Cart\CartRepository;
 
-class CartService
+class CartService extends BaseService
 {
-    public function __construct(protected CartRepository $cartepository) {}
+    public function __construct(protected CartRepository $cartepository) {
+        parent::__construct();
+    }
     public function store($data)
     {
-        return $this->cartepository->add($data['product_id'], $data['quantity']);
+        return $this->store($data['product_id'], $data['quantity']);
     }
     public function total() {
        return $this->cartepository->total();
@@ -15,10 +18,6 @@ class CartService
     public function update($id, $data)
     {
         return $this->cartepository->update($id, $data['quantity']);
-    }
-    public function destroy($id)
-    {
-        return  $this->cartepository->delete($id);
     }
     public function count() {
         return $this->cartepository->count();

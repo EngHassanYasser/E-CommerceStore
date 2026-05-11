@@ -4,7 +4,7 @@ namespace App\Repositories\Product;
 
 use App\Models\Product;
 use App\Models\Tag;
-use App\Repositories\BaseModelRepository;
+use App\Repositories\Base\BaseModelRepository;
 use Arr;
 use Illuminate\Support\Facades\DB;
 use Str;

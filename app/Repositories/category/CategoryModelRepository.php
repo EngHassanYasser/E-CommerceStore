@@ -3,7 +3,7 @@
 namespace App\Repositories\Category;
 
 use App\Models\category;
-use App\Repositories\BaseModelRepository;
+use App\Repositories\Base\BaseModelRepository;
 use Illuminate\Support\Facades\Request;
 
 class CategoryModelRepository extends BaseModelRepository implements CategoryRepository 

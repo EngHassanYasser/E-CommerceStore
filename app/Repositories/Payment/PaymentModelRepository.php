@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories\Payment;
 use App\Models\Payment;
-use App\Repositories\BaseModelRepository;
+use App\Repositories\Base\BaseModelRepository;
 
 class PaymentModelRepository extends BaseModelRepository implements PaymentRepository {
     public function __construct(Payment $payment)

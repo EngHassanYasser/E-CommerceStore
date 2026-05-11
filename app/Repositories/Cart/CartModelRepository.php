@@ -4,7 +4,7 @@ namespace App\Repositories\Cart;
 
 use App\Models\Cart;
 use App\Models\Product;
-use App\Repositories\BaseModelRepository;
+use App\Repositories\Base\BaseModelRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Base;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BaseModelRepository
+class BaseModelRepository implements BaseRepository
 {
     protected $model;
 
@@ -40,9 +40,13 @@ class BaseModelRepository
         return $model->fresh();
     }
 
-    public function delete($id)
+    public function deleteByID($id)
     {
         $model = $this->model->findOrFail($id);
+        return $model->delete();
+    }
+    public function delete($model)
+    {
         return $model->delete();
     }
     public function restore($id)
@@ -75,5 +79,9 @@ class BaseModelRepository
     public function getPaginatedWithRelations(array $relations)
     {
         return $this->model->with($relations)->paginate(10);
+    }
+     public function destroy(Model $model)
+    {
+        return $model->delete();
     }
 }

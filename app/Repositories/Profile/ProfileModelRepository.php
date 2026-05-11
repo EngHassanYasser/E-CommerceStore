@@ -2,7 +2,7 @@
 namespace App\Repositories\Profile;
 
 use App\Models\Profile;
-use App\Repositories\BaseModelRepository;
+use App\Repositories\Base\BaseModelRepository;
 use App\Repositories\Profile\ProfileRepository;
 
 class ProfileModelRepository extends BaseModelRepository implements ProfileRepository

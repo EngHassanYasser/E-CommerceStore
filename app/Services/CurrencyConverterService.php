@@ -3,7 +3,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 
-class CurrencyConverterService {
+class CurrencyConverterService  extends BaseService{
     public function Store($data) {
          $currencyCode = $data->input('currency_code');
         $baseCurrencyCode = config('app.currency', 'USD');

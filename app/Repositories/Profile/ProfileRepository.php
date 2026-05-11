@@ -1,5 +1,8 @@
 <?php
 namespace App\Repositories\Profile;
-interface ProfileRepository {
+
+use App\Repositories\Base\BaseRepository;
+
+interface ProfileRepository extends BaseRepository{
     public function update($user,$data);
 }

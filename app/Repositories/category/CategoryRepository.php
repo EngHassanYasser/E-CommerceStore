@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Category;
 
-interface CategoryRepository
+use App\Repositories\Base\BaseRepository;
+
+interface CategoryRepository extends BaseRepository
 {
     public function getAll();
     public function findTrashesForDashboard();

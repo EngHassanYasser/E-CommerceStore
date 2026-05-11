@@ -3,16 +3,20 @@
 namespace App\Services;
 
 use App\Models\Flag;
+use App\Models\Product;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Product\ProductRepository;
 use Illuminate\Support\Facades\Auth;
 
-class ProductService
+class ProductService extends BaseService
 {
     public function __construct(
         protected ProductRepository $productRepository,
         protected CategoryRepository $categoryRepository,
-    ) {}
+        Product $product
+    ) {
+        parent::__construct($product);
+    }
     public function storeFromDashboard(array $data)
     {
         $data['store_id'] = Auth::user()->store_id;
@@ -51,7 +55,7 @@ class ProductService
     }
     public function getProductsForDashboard()
     {
-        return $this->productRepository->getProductsForDashboard();
+        return $this->productRepository->getPaginatedWithRelations(['category', 'store']);
     }
     public function find($id)
     {

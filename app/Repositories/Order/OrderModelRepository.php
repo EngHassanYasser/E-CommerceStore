@@ -5,7 +5,7 @@ namespace App\Repositories\Order;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Repositories\BaseModelRepository;
+use App\Repositories\Base\BaseModelRepository;
 use App\Repositories\Cart\CartRepository;
 
 class OrderModelRepository extends BaseModelRepository implements OrderRepository

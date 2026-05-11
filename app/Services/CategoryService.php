@@ -6,7 +6,7 @@ use App\Models\Category;
 use App\Repositories\Category\CategoryRepository;
 use Illuminate\Support\Facades\Storage;
 
-class CategoryService
+class CategoryService extends BaseService
 {
     public function __construct(protected CategoryRepository $categoryRepository) {}
     public function store(array $data)
@@ -23,7 +23,7 @@ class CategoryService
     }
     public function destroy($id)
     {
-        $rowsAffected = $this->categoryRepository->destroy($id);
+        $rowsAffected = $this->categoryRepository->delete($id);
         if (! $rowsAffected) {
             abort(code: 404);
         }
@@ -32,7 +32,7 @@ class CategoryService
     {
         $category = $this->categoryRepository->findTrash($id);
         if ($category->image) {
-            $this->categoryRepository->foreDelete($category);
+            $this->categoryRepository->delete($category);
             Storage::disk('public')->delete('images_folder/' . $category->image);
         }
     }
@@ -43,7 +43,7 @@ class CategoryService
     public function getEditeData($id)
     {
         return [
-            'category' => $this->categoryRepository->findByID($id),
+            'category' => $this->categoryRepository->find($id),
             'parents' => $this->categoryRepository->getPossibleParents($id)
         ];
     }
@@ -51,7 +51,5 @@ class CategoryService
     {
         return $this->categoryRepository->findTrashesForDashboard();
     }
-    public function restore($id) {
-        return $this->categoryRepository->restore($id);
-    }
+   
 }
