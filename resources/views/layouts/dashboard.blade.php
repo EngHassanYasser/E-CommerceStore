@@ -32,10 +32,10 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                        <img src="https://media.licdn.com/dms/image/v2/D4D03AQGtG455f-NYlg/profile-displayphoto-scale_400_400/B4DZ3IUhUKJsAg-/0/1777182325172?e=1780531200&v=beta&t=Wzm3YF3n29CjrkWGZX_cMHVW3p2ylVH3dTGyPvBk8Bo" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="{{ route('profile.edite') }}" class="d-block">Alexander Pierce</a>
+                        <a href="{{ route('profile.edite') }}" class="d-block">Hassan Yasser</a>
                         <form method="post" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="btn btn-outline-danger fw-bold">

@@ -4,7 +4,7 @@ namespace App\Repositories\Auth;
 
 use App\Repositories\Base\BaseRepository;
 
-interface AuthRepository extends BaseRepository
+interface AuthRepository
 {
     public function resetPassword($data);
     public function createUser($data);

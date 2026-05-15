@@ -4,9 +4,13 @@ use App\Models\Payment;
 use App\Repositories\Base\BaseModelRepository;
 
 class PaymentModelRepository extends BaseModelRepository implements PaymentRepository {
-    public function __construct(Payment $payment)
+    public function __construct()
     {
-       parent::__construct($payment);
+       parent::__construct();
+    }
+    protected function model()
+    {
+        return new Payment();
     }
     public function create($order_id,$paymentIntent) {
         Payment::create([

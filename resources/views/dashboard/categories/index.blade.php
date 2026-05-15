@@ -42,7 +42,8 @@
             <tr>
             <td>{{ $category->id }}</td>
                 <td>
-                <img src="{{ asset('storage/images_folder/'.$category->image) }}" />
+                <img style="width:50px; height:50px;" src="{{ $category->image}}" />
+                {{-- <img src="{{ asset('storage/images_folder/'.$category->image) }}" /> --}}
                 
                 </td>
             <td><a href="{{ route('categories.show',$category->id) }}">{{ $category->name }}</a></td>

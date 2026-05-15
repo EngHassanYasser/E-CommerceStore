@@ -22,9 +22,6 @@
                             <li><a href="product-grids.html">Headphones</a></li>
                             <li><a href="product-grids.html">View All</a></li>
                         </ul>
-                        <div class="images">
-                            <img src="" alt="#">
-                        </div>
                     </div>
                     <!-- End Single Category -->
                 </div>
@@ -39,9 +36,6 @@
                             <li><a href="product-grids.html">Headphones</a></li>
                             <li><a href="product-grids.html">View All</a></li>
                         </ul>
-                        <div class="images">
-                            <img src="" alt="#">
-                        </div>
                     </div>
                     <!-- End Single Category -->
                 </div>
@@ -56,9 +50,6 @@
                             <li><a href="product-grids.html">Headphones</a></li>
                             <li><a href="product-grids.html">View All</a></li>
                         </ul>
-                        <div class="images">
-                            <img src="" alt="#">
-                        </div>
                     </div>
                     <!-- End Single Category -->
                 </div>
@@ -72,10 +63,6 @@
                             <li><a href="product-grids.html">Audios</a></li>
                             <li><a href="product-grids.html">Headphones</a></li>
                             <li><a href="product-grids.html">View All</a></li>
-                        </ul>
-                        <div class="images">
-                            <img src="" alt="#">
-                        </div>
                     </div>
                     <!-- End Single Category -->
                 </div>
@@ -90,9 +77,6 @@
                             <li><a href="product-grids.html">Headphones</a></li>
                             <li><a href="product-grids.html">View All</a></li>
                         </ul>
-                        <div class="images">
-                            <img src="" alt="#">
-                        </div>
                     </div>
                     <!-- End Single Category -->
                 </div>
@@ -107,10 +91,6 @@
                             <li><a href="product-grids.html">Headphones</a></li>
                             <li><a href="product-grids.html">View All</a></li>
                         </ul>
-                        <div class="images">
-                            <img src="" alt="#">
-                        </div>
-                    </div>
                     <!-- End Single Category -->
                 </div>
             </div>

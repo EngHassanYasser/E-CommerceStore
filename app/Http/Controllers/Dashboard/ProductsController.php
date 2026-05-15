@@ -23,7 +23,6 @@ class ProductsController extends Controller
     public function index()
     {
         $products = $this->productService->getProductsForDashboard();
-
         return view('dashboard.products.index', compact('products'));
     }
 
@@ -79,7 +78,6 @@ class ProductsController extends Controller
     {
         $data=$request->validated();
         $this->productService->updateWithTags($id,$data);
-
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 

@@ -4,15 +4,15 @@ namespace App\Repositories\Base;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BaseModelRepository implements BaseRepository
+abstract class BaseModelRepository implements BaseRepository
 {
     protected $model;
 
-    public function __construct(Model $model)
+    public function __construct()
     {
-        $this->model = $model;
+        $this->model =  $this->model();
     }
-
+    abstract protected function model();
     public function all()
     {
         return $this->model->all();

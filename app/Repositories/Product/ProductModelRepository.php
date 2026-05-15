@@ -11,8 +11,12 @@ use Str;
 
 class ProductModelRepository extends BaseModelRepository implements ProductRepository
 {
-    public function construct(Product $product) {
-        parent::__construct($product);
+    public function construct() {
+        parent::__construct();
+    }
+    protected function model()
+    {
+        return new Product();
     }
     // public function find($id)
     // {

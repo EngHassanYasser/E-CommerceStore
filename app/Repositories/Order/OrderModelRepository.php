@@ -13,11 +13,13 @@ class OrderModelRepository extends BaseModelRepository implements OrderRepositor
     public function __construct(
         protected OrderRepository $orderRepository,
         protected CartRepository $cartRepository,
-        Order $order
     ) {
-        parent::__construct($order);
+        parent::__construct();
     }
-
+    protected function model()
+    {
+        return new Cart();
+    }
     public function StoreOrder($user_id, $data, Cart $cart)
     {
         return  Order::create([

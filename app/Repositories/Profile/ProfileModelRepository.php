@@ -11,6 +11,10 @@ class ProfileModelRepository extends BaseModelRepository implements ProfileRepos
     {
         return parent::__construct($profile);
     }
+    protected function model()
+    {
+        return new Profile();
+    }
     public function update($user, $data)
     {
         if ($user->isDirty('email')) {

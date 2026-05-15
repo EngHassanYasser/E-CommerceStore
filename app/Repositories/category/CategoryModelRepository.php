@@ -11,6 +11,10 @@ class CategoryModelRepository extends BaseModelRepository implements CategoryRep
     public function __construct(Category $category) {
         parent::__construct($category);
     }
+    protected function model()
+    {
+        return new Category();
+    }
     public function getAll()
     {
         return Category::with('parent', 'products')

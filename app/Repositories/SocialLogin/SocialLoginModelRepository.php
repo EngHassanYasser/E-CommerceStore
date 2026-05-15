@@ -3,11 +3,10 @@
 namespace App\Repositories\SocialLogin;
 
 use App\Models\User;
-use App\Repositories\Base\BaseModelRepository;
 use Illuminate\Support\Facades\Hash;
 use Str;
 
-class SocialLoginModelRepository extends BaseModelRepository implements SocialLoginRepository
+class SocialLoginModelRepository  implements SocialLoginRepository
 {
     public function createUser($provider_user, $provider)
     {

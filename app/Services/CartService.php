@@ -2,7 +2,6 @@
 namespace App\Services;
 
 use App\Repositories\Cart\CartRepository;
-
 class CartService extends BaseService
 {
     public function __construct(protected CartRepository $cartepository) {

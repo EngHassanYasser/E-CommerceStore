@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Str;
 
-class AuthModelRepository extends BaseModelRepository implements AuthRepository
+class AuthModelRepository  implements AuthRepository
 {
     public function resetPassword($data)
     {

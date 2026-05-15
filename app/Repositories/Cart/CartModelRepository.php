@@ -18,7 +18,10 @@ class CartModelRepository extends BaseModelRepository implements CartRepository
 
         $this->items = collect([]);
     }
-
+    protected function model()
+    {
+        return new Cart();
+    }
     public function all(): Collection
     {
         if (! $this->items->count()) {
