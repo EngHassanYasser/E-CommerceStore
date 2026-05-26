@@ -29,6 +29,9 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             Log::debug($e->getMessage());
         });
+          $this->reportable(function (Error $e) {
+            Log::debug($e->getMessage());
+        });
         $this->renderable(function (Error $e) {
             return redirect()->route('home')->with([
                 'message' => 'something was wrong please try again',

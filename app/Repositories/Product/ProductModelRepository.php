@@ -81,14 +81,10 @@ class ProductModelRepository extends BaseModelRepository implements ProductRepos
         return $tagIds;
     }
 
-    public function updateWithTags(int $id, array $data): Product
+    public function updateWithTags(Product $product, array $data): Product
     {
-        return DB::transaction(function () use ($id, $data) {
-            $product = $this->find($id);
-            $this->update(
-                $product,
-                Arr::except($data, 'tags')
-            );
+        return DB::transaction(function () use ($product, $data) {
+            $product->update(Arr::except($data, 'tags'));
             $tagIds = $this->resolveTags($data['tags'] ?? '');
 
             $product->tags()->sync($tagIds);

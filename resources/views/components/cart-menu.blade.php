@@ -15,8 +15,8 @@
                       <a data-id="{{ $item->id }}" href="javascript:void(0)" class="remove remove-menu-cart-item"
                           title="Remove this item"><i class="lni lni-close"></i></a>
                       <div class="cart-img-head">
-                          <a class="cart-img" href="{{ route('products.show', $item->product->slug) }}"><img
-                                  src="{{ $item->product->imgage_url }}" alt="#"></a>
+                          <a class="cart-img" href="{{ route('products.show', $item->product->slug) }}">
+                            <img src="{{asset('storage/products/' . $item->product->image)}}" alt="#"></a>
                       </div>
                       <div class="content">
                           <h4><a href="product-details.html">{{ $item->product->name }}</a></h4>

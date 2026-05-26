@@ -5,12 +5,17 @@ namespace App\Services;
 use App\Models\Category;
 use App\Repositories\Category\CategoryRepository;
 use Illuminate\Support\Facades\DB;
+use Str;
 
 class CategoryService extends BaseService
 {
     public function __construct(protected CategoryRepository $categoryRepository) {}
-    public function add(array $data)
+    public function add($file,array $data)
     {
+        $data['slug'] = Str::slug($data['name']);
+        if ($file) {
+            $data['image'] = FileService::upload($file,'categories');
+        }
         $this->categoryRepository->store($data);
     }
     public function findByID($id)
@@ -19,20 +24,18 @@ class CategoryService extends BaseService
     }
     public function updateCategory($id, $data, $file)
     {
+
         DB::transaction(function () use ($id, $data, $file) {
 
             $category = $this->findByID($id);
-
-            $this->update($category, $data);
-
             if ($file) {
-                FileService::update($file, $category->image);
+                $Image_path =  FileService::replaceImage($file, $category->image,'categories');
+                $data['image'] = $Image_path;
+                $category->update($data);
+            } else {
+                $category->update($data);
             }
         });
-    }
-    public function update($category, array $data)
-    {
-        $category->update($data);
     }
     public function deleteById($id)
     {
@@ -46,7 +49,7 @@ class CategoryService extends BaseService
         $category = $this->categoryRepository->findTrash($id);
         if ($category->image) {
             $this->categoryRepository->delete($category);
-            FileService::deleteFromFolder('images_folder', $category->image);
+            FileService::deleteFromFolder($category->image,'categories');
         }
     }
     public function getAll()

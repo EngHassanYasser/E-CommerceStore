@@ -77,7 +77,8 @@ class ProductsController extends Controller
     public function update(UpdateProductRequest $request, string $id)
     {
         $data=$request->validated();
-        $this->productService->updateWithTags($id,$data);
+        $file = $request->file('image');
+        $this->productService->updateWithTags($id,$data,$file);
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 

@@ -30,6 +30,7 @@ class UpdateProductRequest extends FormRequest
             'tags'=>[],
             'compare_price'=>[],
             'flags'=>[],
+            'image'=>[]
         ];
     }
 }

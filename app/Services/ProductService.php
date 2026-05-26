@@ -61,8 +61,12 @@ class ProductService extends BaseService
     {
         return $this->productRepository->find($id);
     }
-    public function updateWithTags($id, $data)
+    public function updateWithTags($id, $data, $file)
     {
-        return $this->productRepository->updateWithTags($id, $data);
+        $product = $this->find($id);
+        if ($file) {
+            $data['image'] = FileService::replaceImage($file, $product->image, 'products');
+        }
+        return $this->productRepository->updateWithTags($product, $data);
     }
 }

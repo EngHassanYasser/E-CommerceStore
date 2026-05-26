@@ -8,7 +8,7 @@ use App\Models\category;
 use App\Services\CategoryService;
 use App\Services\FileService;
 use Exception;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class CategoriesController extends Controller
@@ -36,17 +36,14 @@ class CategoriesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+
     public function store(CategoryRequest $request)
     {
-
-        $data = $request->validated();
         $file = $request->file('image');
-        $data['slug'] = Str::slug($data['name']);
+        $data = $request->validated();
         
-        if ($file) {
-            $data['image'] = FileService::upload($file);
-        }
-        $this->categoryService->add($data);
+        $this->categoryService->add($file,$data);
 
         return redirect()->route('categories.index')
             ->with('success', 'Category Added Successfully');
@@ -75,9 +72,13 @@ class CategoriesController extends Controller
     }
     public function update(CategoryRequest $request, $id)
     {
+
         $data = $request->validated();
         $file = $request->file('image');
-        $this->categoryService->updateCategory($id,$data,$file);
+        if (! $file || ! $file->isValid()) {
+            $file = null;
+        }
+        $this->categoryService->updateCategory($id, $data, $file);
 
         return redirect()->route('categories.index')
             ->with('success', 'Category Updated Successfully');

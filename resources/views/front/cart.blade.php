@@ -54,7 +54,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-1 col-md-1 col-12">
                             <a href="{{ route('products.show',$item->product->slug) }}">
-                                <img src="{{ $item->product->image_url }}" alt="#"></a>
+                                <img src="{{asset('storage/products/' . $item->product->image)}}" alt="#"></a>
                         </div>
                         <div class="col-lg-4 col-md-3 col-12">
                             <h5 class="product-name"><a href="{{ route('products.show',$item->product->slug) }}">

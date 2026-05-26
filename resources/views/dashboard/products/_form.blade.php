@@ -33,11 +33,7 @@
     <input type="number" name="quantity" value="{{ $product->quantity }}" class="form-control" />
 </div>
 
-<div class="form-group">
-    <label for="">Image</label>
-    <input type="file" name="image" class="form-controller" />
-</div>
-
+<x-image-preview basePath="storage/product" :image="$product->image" />
 
 <div class="form-group">
     <label for="">price</label>
@@ -58,10 +54,7 @@
         @foreach ($flags as $flag)
             <div class="col-md-1">
                 <label>
-                    <input type="checkbox"
-                           name="flags[]"
-                           value="{{ $flag->id }}"
-                           @checked(in_array($flag->id, old('flags', $productFlags ?? [])))>
+                    <input type="checkbox" name="flags[]" value="{{ $flag->id }}" @checked(in_array($flag->id, old('flags', $productFlags ?? [])))>
 
                     {{ $flag->name }}
                 </label>

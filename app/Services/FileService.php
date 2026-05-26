@@ -8,37 +8,46 @@ abstract class  FileService extends BaseService
 {
     public static function upload($file, $folder = 'images_folder')
     {
-        if (! $file) {
+        if (! $file || ! $file->isValid()) {
             return null;
         }
 
-        return $file->store($folder, 'public');
+        $name = uniqid() . '.' . $file->getClientOriginalExtension();
+
+        $file->move(storage_path('app/public/' . $folder), $name);
+
+        return $name;
     }
-    public static function update($file, $oldPath, $folder = 'images_folder')
-    {
-        if (! $file) {
+
+    public static function replaceImage(
+        $file,
+        ?string $oldPath = null,
+        string $folderName = 'public_files',
+        string $disk = 'public'
+    ): ?string {
+
+        if (! $file || ! $file->isValid()) {
             return $oldPath;
         }
 
-        // upload new image
-        $newPath = $file->store($folder, 'public');
+        try {
+            $fileName = FileService::upload($file, $folderName);
 
-        // delete old image
-        if ($oldPath && Storage::disk('public')->exists($oldPath)) {
-            Storage::disk('public')->delete($oldPath);
-        }
+            if ($oldPath) {
+                FileService::DeleteFromFolder($fileName, $folderName, $disk);
+            }
 
-        return $newPath;
-    }
-
-    public static function delete($path)
-    {
-        if ($path && Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->delete($path);
+            return $fileName;
+        } catch (\Throwable $e) {
+            report($e);
+            return $oldPath;
         }
     }
-    public static function DeleteFromFolder($folder_name,$image_name)
+    public static function DeleteFromFolder($fileName, $folderName, $disk='public')
     {
-        Storage::disk('public')->delete($folder_name.'/' . $image_name);
+        $path = $fileName . '/' . $folderName;
+        if ($path && Storage::disk($disk)->exists($path)) {
+            Storage::disk($disk)->delete($folderName . '/' . $fileName);
+        }
     }
 }

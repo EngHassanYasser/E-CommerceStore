@@ -29,10 +29,9 @@ class CategoryRequest extends FormRequest
             'parent_id' => [
                 'nullable','int', 'exists:categories,id',
             ],
-            'image' => [
-                'image', 'dimensions:min_length:100,min_height:100',
-            ],
+            'image'=>[],
             'status' => 'in:active,archived',
+            'description'=>[]
 
         ];
     }
