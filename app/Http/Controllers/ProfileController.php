@@ -41,7 +41,7 @@ class ProfileController extends Controller
     {
         $user = $request->user();
 
-        $this->profileService->destroy($user);
+        $this->profileService->delete($user);
 
         Auth::logout();
         $request->session()->invalidate();

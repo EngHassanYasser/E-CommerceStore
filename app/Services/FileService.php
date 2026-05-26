@@ -4,9 +4,9 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
 
-class FileService extends BaseService
+abstract class  FileService extends BaseService
 {
-    public function upload($file, $folder = 'images_folder')
+    public static function upload($file, $folder = 'images_folder')
     {
         if (! $file) {
             return null;
@@ -14,7 +14,7 @@ class FileService extends BaseService
 
         return $file->store($folder, 'public');
     }
-    public function update($file, $oldPath, $folder = 'images_folder')
+    public static function update($file, $oldPath, $folder = 'images_folder')
     {
         if (! $file) {
             return $oldPath;
@@ -31,10 +31,14 @@ class FileService extends BaseService
         return $newPath;
     }
 
-    public function delete($path)
+    public static function delete($path)
     {
         if ($path && Storage::disk('public')->exists($path)) {
             Storage::disk('public')->delete($path);
         }
+    }
+    public static function DeleteFromFolder($folder_name,$image_name)
+    {
+        Storage::disk('public')->delete($folder_name.'/' . $image_name);
     }
 }

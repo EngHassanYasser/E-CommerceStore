@@ -1,13 +1,17 @@
 <?php
+
 namespace App\Services;
+
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 
-class CurrencyConverterService  extends BaseService{
-    public function Store($data) {
-         $currencyCode = $data->input('currency_code');
+class CurrencyConverterService  extends BaseService
+{
+    public function store($data)
+    {
+        $currencyCode = $data->input('currency_code');
         $baseCurrencyCode = config('app.currency', 'USD');
-        $cashKey = 'currency_rate_'.$currencyCode;
+        $cashKey = 'currency_rate_' . $currencyCode;
 
         $rate = Cache::get($cashKey, 0);
         if (! $rate) {
@@ -16,6 +20,5 @@ class CurrencyConverterService  extends BaseService{
             Cache::put($cashKey, $rate, now()->addMinutes(60));
         }
         Session::put('currency_code', $currencyCode);
-
     }
 }

@@ -9,7 +9,7 @@ class CartService extends BaseService
     }
     public function store($data)
     {
-        return $this->store($data['product_id'], $data['quantity']);
+        return $this->cartepository->store($data['product_id'], $data['quantity']);
     }
     public function total() {
        return $this->cartepository->total();
@@ -21,7 +21,7 @@ class CartService extends BaseService
     public function count() {
         return $this->cartepository->count();
     }
-    public function delete($id) {
+    public function deleteById($id) {
         return $this->cartepository->deleteByID($id);
     }
 }

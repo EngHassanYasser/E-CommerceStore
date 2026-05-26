@@ -23,11 +23,11 @@ class ProfileService extends BaseService
             'locales' => Languages::getNames()
         ];
     }
-    public function destroy(User $user)
+    public function delete(User $user)
     {
         $this->profileRepository->delete($user);
     }
-    public function update($user, $data)
+    public function Update($user, $data)
     {
         $this->profileRepository->update($user, $data);
     }

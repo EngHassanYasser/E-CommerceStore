@@ -55,7 +55,7 @@ class ProductService extends BaseService
     }
     public function getProductsForDashboard()
     {
-        return $this->productRepository->getPaginatedWithRelations(['category', 'store']);
+        return $this->productRepository->GetPaginatedWithRelations(['category', 'store']);
     }
     public function find($id)
     {

@@ -8,15 +8,13 @@ use App\Models\category;
 use App\Services\CategoryService;
 use App\Services\FileService;
 use Exception;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 
 class CategoriesController extends Controller
 {
     public function __construct(
-        protected CategoryService $categoryService,
-        protected FileService $fileService
+        protected CategoryService $categoryService
     ) {}
     public function index(Request $request)
     {
@@ -46,9 +44,9 @@ class CategoriesController extends Controller
         $data['slug'] = Str::slug($data['name']);
         
         if ($file) {
-            $data['image'] = $this->fileService->upload($file);
+            $data['image'] = FileService::upload($file);
         }
-        $this->categoryService->store($data);
+        $this->categoryService->add($data);
 
         return redirect()->route('categories.index')
             ->with('success', 'Category Added Successfully');
@@ -79,17 +77,7 @@ class CategoriesController extends Controller
     {
         $data = $request->validated();
         $file = $request->file('image');
-
-        DB::transaction(function () use ($id, $data, $file) {
-
-            $category = $this->categoryService->findByID($id);
-
-            $this->categoryService->update($category, $data);
-
-            if ($file) {
-                $this->fileService->update($file, $category->image);
-            }
-        });
+        $this->categoryService->updateCategory($id,$data,$file);
 
         return redirect()->route('categories.index')
             ->with('success', 'Category Updated Successfully');
@@ -99,7 +87,7 @@ class CategoriesController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->categoryService->destroy($id);
+        $this->categoryService->deleteById($id);
 
         return redirect()->route('categories.index')->with('success', 'category deleted successfully');
     }
@@ -113,15 +101,14 @@ class CategoriesController extends Controller
 
     public function restore($id)
     {
-        $this->categoryService->restore($id);
+        $this->categoryService->restoryByID($id);
 
         return redirect()->route('categories.trash')->with('success', 'category restored successfully');
     }
 
     public function forceDelete($id)
     {
-        $this->categoryService->forceDelete($id);
-
+        $this->categoryService->forceDeleteById($id);
         return redirect()->route('categories.trash')->with('success', 'category deleted permanently');
     }
 }

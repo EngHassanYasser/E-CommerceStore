@@ -14,7 +14,7 @@ class StripePaymentService extends BaseService
 
     public function handle($request)
     {
-        $payload = $request->getContent();
+        $payload = $request->GetContent();
         \Log::debug('webhook event received', json_decode($payload, true));
     }
 
@@ -28,7 +28,7 @@ class StripePaymentService extends BaseService
             'automatic_payment_methods' => ['enabled' => true],
         ]);
 
-        $this->paymentService->create($order->id, $paymentIntent);
+        $this->paymentService->createPayment($order->id, $paymentIntent);
         return $paymentIntent;
     }
     public function confirmPayment($order, $intentId)
@@ -39,7 +39,7 @@ class StripePaymentService extends BaseService
         );
 
         if ($paymentIntent->status == "succeeded") {
-            $this->paymentService->confirm($order->id, $paymentIntent);
+            $this->paymentService->confirmPayment($order->id, $paymentIntent);
             // event('payment.succeeded', $payment);
         }
         return $paymentIntent;
