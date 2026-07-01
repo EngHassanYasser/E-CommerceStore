@@ -17,7 +17,7 @@ class Product extends Model
     protected $appends = ['image_url'];
 
     protected $fillable = [
-        'name', 'slug', 'description', 'image', 'category_id', 'store_id',
+        'name', 'slug', 'description', 'image', 'category_id',
         'price', 'compare_price', 'status', 'quantity',
     ];
 
@@ -50,9 +50,6 @@ class Product extends Model
     
     protected static function booted()
     {
-
-        static::addGlobalScope('store', new StoreScope);
-
         static::creating(function (Product $product) {
             $product->slug = Str::slug($product->name);
         });
@@ -85,7 +82,6 @@ class Product extends Model
     public function scopeFilter(Builder $builder, $filters)
     {
         $options = array_merge([
-            'store_id' => null,
             'category_id' => null,
             'tag_id' => null,
             'status' => 'active',
@@ -93,10 +89,6 @@ class Product extends Model
 
         $builder->when($options['status'], function ($builder, $value) {
             $builder->where('status', $value);
-        });
-
-        $builder->when($options['store_id'], function ($builder, $value) {
-            $builder->where('store_id', $value);
         });
 
         $builder->when($options['category_id'], function ($builder, $value) {

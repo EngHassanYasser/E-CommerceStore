@@ -4,6 +4,7 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 
+use App\Models\Admin;
 use App\Models\product;
 use App\Policies\ProductPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -23,7 +24,7 @@ class AuthServiceProvider extends ServiceProvider
     public function register()
     {
         Gate::before(function ($user, $ability) {
-            if ($user->super_admin) {
+            if ($user instanceof Admin) {
                 return true;
             }
         });
@@ -32,7 +33,6 @@ class AuthServiceProvider extends ServiceProvider
         $this->app->bind('abilities', function () {
             return include base_path('data/abilities.php');
         });
-
     }
 
     /**

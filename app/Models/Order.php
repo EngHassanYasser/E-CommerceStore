@@ -13,13 +13,8 @@ class Order extends Model
     protected $table = 'orders';
 
     protected $fillable = [
-        'id', 'store_id', 'user_id', 'payment_method', 'status', 'paymnt_status',
+        'id', 'user_id', 'payment_method', 'status', 'paymnt_status',
     ];
-
-    public function store()
-    {
-        return $this->belongsTo(Store::class);
-    }
 
     public function user()
     {

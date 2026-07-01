@@ -19,7 +19,6 @@ class ProductService extends BaseService
     }
     public function storeFromDashboard(array $data)
     {
-        $data['store_id'] = Auth::user()->store_id;
         return $this->productRepository->store($data);
     }
     public function getEditData($id)
