@@ -47,8 +47,7 @@ class ProductsController extends Controller
         $request->merge([
             'slug' => Str::slug($request->name),
         ]);
-        $data  =$request->validated();
-        $this->productService->storeFromDashboard($data);
+        $this->productService->storeFromDashboard($request->validated());
         return redirect()->route('products.index')->with('success', 'Product created successfully');
     }
 

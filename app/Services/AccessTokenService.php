@@ -47,7 +47,6 @@ class AccessTokenService
         $isOwner =
             $accessToken->tokenable_id === $user->id &&
             $accessToken->tokenable_type === get_class($user);
-
         if (! $isOwner) {
             return false;
         }

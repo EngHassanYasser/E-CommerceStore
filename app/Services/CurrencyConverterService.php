@@ -5,7 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Session;
 
-class CurrencyConverterService  extends BaseService
+class CurrencyConverterService
 {
     public function store($data)
     {

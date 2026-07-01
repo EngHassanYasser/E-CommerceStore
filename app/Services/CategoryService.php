@@ -3,20 +3,19 @@
 namespace App\Services;
 
 use App\Models\Category;
-use App\Repositories\Category\CategoryRepository;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 use Str;
 
-class CategoryService extends BaseService
+class CategoryService
 {
-    public function __construct(protected CategoryRepository $categoryRepository) {}
-    public function add($file,array $data)
+    public function add($file, array $data)
     {
         $data['slug'] = Str::slug($data['name']);
         if ($file) {
-            $data['image'] = FileService::upload($file,'categories');
+            $data['image'] = FileService::upload($file, 'categories');
         }
-        $this->categoryRepository->store($data);
+        Category::create($data);
     }
     public function findByID($id)
     {
@@ -29,7 +28,7 @@ class CategoryService extends BaseService
 
             $category = $this->findByID($id);
             if ($file) {
-                $Image_path =  FileService::replaceImage($file, $category->image,'categories');
+                $Image_path =  FileService::replaceImage($file, $category->image, 'categories');
                 $data['image'] = $Image_path;
                 $category->update($data);
             } else {
@@ -39,36 +38,45 @@ class CategoryService extends BaseService
     }
     public function deleteById($id)
     {
-        $rowsAffected = $this->categoryRepository->delete($id);
+        $category = Category::findOrFail($id);
+        $rowsAffected = $category->delete();
+
         if (! $rowsAffected) {
             abort(code: 404);
         }
     }
     public function forceDeleteById($id)
     {
-        $category = $this->categoryRepository->findTrash($id);
+        $category = Category::withTrashed()->findOrFail($id);
+
+        $category->onlyTrashed()->findOrFail($id);
+
         if ($category->image) {
-            $this->categoryRepository->delete($category);
-            FileService::deleteFromFolder($category->image,'categories');
+            Category::delete($category);
+            FileService::deleteFromFolder($category->image, 'categories');
         }
     }
     public function getAll()
     {
-        return $this->categoryRepository->getAll();
+        return Category::with('parent', 'products')
+            ->filter(Request::query())
+            ->select('categories.*')->withCount('products')
+            ->paginate(5);
     }
     public function getEditeData($id)
     {
         return [
-            'category' => $this->categoryRepository->find($id),
-            'parents' => $this->categoryRepository->getPossibleParents($id)
+            'category' => Category::find($id),
+            'parents' =>  Category::where('id', '<>', $id)->get(),
         ];
     }
     public function findTrashesForDashboard()
     {
-        return $this->categoryRepository->findTrashesForDashboard();
+        return Category::onlyTrashed()->paginate();
     }
     public function restoryByID($id)
     {
-        return $this->categoryRepository->restore($id);
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->restore();
     }
 }

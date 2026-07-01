@@ -2,63 +2,101 @@
 
 namespace App\Services;
 
+use App\Models\Category;
 use App\Models\Flag;
 use App\Models\Product;
-use App\Repositories\Category\CategoryRepository;
-use App\Repositories\Product\ProductRepository;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Tag;
+use Illuminate\Support\Facades\DB;
+use Arr;
+use Illuminate\Support\Facades\Request;
+use Str;
 
-class ProductService extends BaseService
+class ProductService
 {
-    public function __construct(
-        protected ProductRepository $productRepository,
-        protected CategoryRepository $categoryRepository,
-        Product $product
-    ) {
-        parent::__construct($product);
-    }
     public function storeFromDashboard(array $data)
     {
-        return $this->productRepository->store($data);
+        return DB::transaction(function () use ($data) {
+            $product = Product::create($data);
+            $flags = $data['flags'] ?? [];
+
+            $product->flags()->sync($flags);
+            return $product->fresh();
+        });
     }
     public function getEditData($id)
     {
-        $product = $this->productRepository->find($id);
+        $product = Product::with('flags')->findOrFail($id);
         return [
             'productFlags' => $product->flags()->pluck('id')->toArray(),
             'product' => $product,
-            'categories' => $this->categoryRepository->getAll(),
+            'categories' => $this->getAll(),
             'tags' => $product->tags->pluck('name')->implode(','),
             'flags' => Flag::all(),
         ];
     }
     public function getProductsForApi(array $filters)
     {
-        return $this->productRepository->getProductsForApi($filters);
+        return Product::filter($filters)->with('category', 'store')->paginate(10);
     }
     public function store($data)
     {
-        return $this->productRepository->store($data);
+        return DB::transaction(function () use ($data) {
+            $product = Product::create($data);
+            $flags = $data['flags'] ?? [];
+
+            $product->flags()->sync($flags);
+            return $product->fresh();
+        });
     }
     public function update($product, $data)
     {
-        return $this->productRepository->update($product, $data);
+        return DB::transaction(function () use ($product, $data) {
+            $product->update($data);
+            $flags = $data['flags'] ?? [];
+
+            $product->flags()->sync($flags);
+
+            return $product->fresh();
+        });
     }
     public function deleteByID($id)
     {
-        return $this->productRepository->deleteByID($id);
+        $product = Product::findOrFail($id);
+        return $product->delete();
     }
     public function getActiveProducts()
     {
-        return $this->productRepository->getActiveProducts();
+        return Product::with('category')->active()
+            ->latest()
+            ->limit(8)
+            ->get();
     }
     public function getProductsForDashboard()
     {
-        return $this->productRepository->GetPaginatedWithRelations(['category', 'store']);
+        return Product::with(['category', 'store'])->paginate(10);
     }
     public function find($id)
     {
-        return $this->productRepository->find($id);
+        return Product::with('flags')->findOrFail($id);
+    }
+    public function resolveTags(string $tags): array
+    {
+        $tagIds = [];
+
+        $tags = array_filter(explode(',', $tags));
+
+        foreach ($tags as $name) {
+            $slug = Str::slug($name);
+
+            $tag = Tag::firstOrCreate(
+                ['slug' => $slug],
+                ['name' => $name]
+            );
+
+            $tagIds[] = $tag->id;
+        }
+
+        return $tagIds;
     }
     public function updateWithTags($id, $data, $file)
     {
@@ -66,6 +104,20 @@ class ProductService extends BaseService
         if ($file) {
             $data['image'] = FileService::replaceImage($file, $product->image, 'products');
         }
-        return $this->productRepository->updateWithTags($product, $data);
+        return DB::transaction(function () use ($product, $data) {
+            $product->update(Arr::except($data, 'tags'));
+            $tagIds = $this->resolveTags($data['tags'] ?? '');
+
+            $product->tags()->sync($tagIds);
+
+            return $product->fresh();
+        });
+    }
+    public function getAll()
+    {
+        return Category::with('parent', 'products')
+            ->filter(Request::query())
+            ->select('categories.*')->withCount('products')
+            ->paginate(5);
     }
 }

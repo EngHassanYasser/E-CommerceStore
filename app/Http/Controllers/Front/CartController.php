@@ -27,9 +27,7 @@ class CartController extends Controller
      */
     public function store(StoreCartRequest $request)
     {
-        $data = $request->validated();
-
-        $this->cartService->store($data);
+        $this->cartService->store($request->validated());
 
         if ($request->expectsJson()) {
             return response()->json([

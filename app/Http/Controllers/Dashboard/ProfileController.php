@@ -20,8 +20,7 @@ class ProfileController extends Controller
 
     public function update(UpdateProductRequest $request)
     {
-        $data=$request->validated();
-        $this->profileService->update($request->user(), $data);
+        $this->profileService->update($request->user(), $request->validated());
 
         return redirect()->route('profile.edite')->with('success', 'Profile updated successfully');
     }

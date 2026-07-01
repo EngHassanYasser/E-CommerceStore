@@ -2,20 +2,40 @@
 
 namespace App\Services;
 
-use App\Repositories\Auth\AuthRepository;
-use App\Services\BaseService;
+use App\Models\User;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Str;
 
-class AuthService extends BaseService
+class AuthService
 {
-    public function __construct(protected AuthRepository $authRepository) {}
     public function resetPassword($data)
     {
-        return $this->authRepository->resetPassword($data);
+        $result = Password::reset(
+            $data,
+            function ($user) use ($data) {
+                $user->forceFill([
+                    'password' => Hash::make($data['password']),
+                    'remember_token' => Str::random(60),
+                ])->save();
+                event(new PasswordReset($user));
+            }
+        );
+        return $result;
     }
-    public function createUser($data) {
-        return $this->authRepository->createUser($data);
+    public function createUser($data)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
     }
-    public function changePassword($user,$newPassword) {
-        return $this->authRepository->changePassword($user,$newPassword);
+    public function changePassword($user, $newPassword)
+    {
+         $user->update([
+            'password' => Hash::make($newPassword),
+        ]);
     }
 }

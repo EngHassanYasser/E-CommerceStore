@@ -2,19 +2,13 @@
 
 namespace App\Services;
 
-use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\Repositories\Profile\ProfileRepository;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Languages;
 
-class ProfileService extends BaseService
+class ProfileService
 {
-    public function __construct(protected ProfileRepository $profileRepository, Profile $profile)
-    {
-        parent::__construct($profile);
-    }
     public function getEditData()
     {
         return [
@@ -25,10 +19,13 @@ class ProfileService extends BaseService
     }
     public function delete(User $user)
     {
-        $this->profileRepository->delete($user);
+        return User::delete($user);
     }
     public function Update($user, $data)
     {
-        $this->profileRepository->update($user, $data);
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+        return $user->profile->fill($data)->save();
     }
 }

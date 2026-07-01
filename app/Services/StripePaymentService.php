@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Order;
 use Illuminate\Support\Facades\Request;
 
-class StripePaymentService extends BaseService
+class StripePaymentService
 {
     public function __construct(
         protected PaymentService $paymentService,
@@ -28,7 +28,7 @@ class StripePaymentService extends BaseService
             'automatic_payment_methods' => ['enabled' => true],
         ]);
 
-        $this->paymentService->createPayment($order->id, $paymentIntent);
+        $this->paymentService->create($order->id, $paymentIntent);
         return $paymentIntent;
     }
     public function confirmPayment($order, $intentId)
@@ -39,7 +39,7 @@ class StripePaymentService extends BaseService
         );
 
         if ($paymentIntent->status == "succeeded") {
-            $this->paymentService->confirmPayment($order->id, $paymentIntent);
+            $this->paymentService->confirm($order->id, $paymentIntent);
             // event('payment.succeeded', $payment);
         }
         return $paymentIntent;

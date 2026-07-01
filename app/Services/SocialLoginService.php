@@ -1,14 +1,29 @@
 <?php
+
 namespace App\Services;
 
-use App\Repositories\SocialLogin\SocialLoginRepository;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Str;
 
-class SocialLoginService extends BaseService{
-    public function __construct(protected SocialLoginRepository $socialLoginRepository){}
-    public function createUser($provider_user, $provider) {
-        return $this->socialLoginRepository->createUser($provider_user,$provider);
+class SocialLoginService
+{
+    public function createUser($provider_user, $provider)
+    {
+        return  User::create([
+            'name' => $provider_user->name,
+            'email' => $provider_user->email,
+            'provider' => $provider,
+            'provider_id' => $provider_user->id,
+            'password' => Hash::make(Str::random(16)),
+            'provider_token' => $provider_user->token,
+        ]);
     }
-        public function findUserByProvider($provider_user, $provider) {
-            return $this->socialLoginRepository->findUserByProvider($provider_user,$provider);
-        }
+    public function findUserByProvider($provider_user, $provider)
+    {
+        return User::where([
+            'provider' => $provider,
+            'provider_id' => $provider_user->id,
+        ])->first();
+    }
 }

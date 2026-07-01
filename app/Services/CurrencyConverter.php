@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Exceptions\CustomErrorException;
 use Illuminate\Support\Facades\Http;
 
-class CurrencyConverter extends BaseService
+class CurrencyConverter
 {
     private $apiKey;
 

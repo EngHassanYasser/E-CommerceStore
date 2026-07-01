@@ -11,9 +11,7 @@ class CurrencyConverterController extends Controller
     public function __construct(protected CurrencyConverterService $currencyConverterService) {}
     public function store(CurrencyConverterRequest $request)
     {
-       $data= $request->validated();
-
-       $this->currencyConverterService->store($data);
+       $this->currencyConverterService->store($request->validated());
        
         return redirect()->back();
     }

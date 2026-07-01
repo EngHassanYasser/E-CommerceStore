@@ -29,9 +29,7 @@ class RegisteredUserController extends Controller
      */
     public function store(StoreRegisteredUserRequest $request): RedirectResponse
     {
-        $data=$request->validated();
-
-        $user = $this->authService->createUser($data);
+        $user = $this->authService->createUser($request->validated());
 
         event(new Registered($user));
 

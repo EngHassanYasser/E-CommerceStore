@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-class CheckoutService extends BaseService
+class CheckoutService
 {
     public function store($data, $cart)
     {

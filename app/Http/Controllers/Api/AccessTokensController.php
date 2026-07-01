@@ -13,13 +13,9 @@ class AccessTokensController extends Controller
 
     public function store(StoreAccessToken $request)
     {
-        $data = $request->validated();
-
-        $userAgent = $request->userAgent();
-
         $result = $this->accessTokenService->createToken(
-            $data,
-            $userAgent
+           $request->validated(),
+          $request->userAgent()
         );
 
         if (! $result) {

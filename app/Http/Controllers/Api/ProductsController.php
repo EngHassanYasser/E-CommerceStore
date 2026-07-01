@@ -31,18 +31,14 @@ class ProductsController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $data = $request->validated();
-
-        return $this->productService->store($data);
+        return $this->productService->store($request->validated());
     }
     /**
      * Update the specified resource in storage.
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        $data = $request->validated();
-
-        return $this->productService->update($product, $data);
+        return $this->productService->update($product, $request->validated());
     }
 
     /**
