@@ -13,7 +13,11 @@ class Order extends Model
     protected $table = 'orders';
 
     protected $fillable = [
-        'id', 'user_id', 'payment_method', 'status', 'paymnt_status',
+        'id',
+        'user_id',
+        'payment_method',
+        'status',
+        'paymnt_status',
     ];
 
     public function user()
@@ -22,7 +26,8 @@ class Order extends Model
             'name' => 'Guest Customer',
         ]);
     }
-    public function orderItems() {
+    public function orderItems()
+    {
         return $this->hasMany(OrderItem::class);
     }
 
@@ -31,7 +36,10 @@ class Order extends Model
         return $this->belongsToMany(Product::class, 'order_items', 'order_id', 'product_id', 'id', 'id')
             ->using(OrderItem::class)
             ->withPivot([
-                'product_name', 'price', 'quantity', 'options',
+                'product_name',
+                'price',
+                'quantity',
+                'options',
             ]);
     }
 
@@ -69,7 +77,6 @@ class Order extends Model
             return $number + 1;
         }
 
-        return $year.'0001';
-
+        return $year . '0001';
     }
 }

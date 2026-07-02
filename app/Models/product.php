@@ -12,13 +12,25 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $hidden = ['created_at', 'updated_at', 'deleted_at', 'image'];
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'image'
+    ];
 
     protected $appends = ['image_url'];
 
     protected $fillable = [
-        'name', 'slug', 'description', 'image', 'category_id',
-        'price', 'compare_price', 'status', 'quantity',
+        'name',
+        'slug',
+        'description',
+        'image',
+        'category_id',
+        'price',
+        'compare_price',
+        'status',
+        'quantity',
     ];
 
     public function Category()
@@ -44,10 +56,11 @@ class Product extends Model
             'id'
         );
     }
-    public function flags() {
-        return $this->belongsToMany(Flag::class,'flag_products');
+    public function flags()
+    {
+        return $this->belongsToMany(Flag::class, 'flag_products');
     }
-    
+
     protected static function booted()
     {
         static::creating(function (Product $product) {
@@ -71,7 +84,7 @@ class Product extends Model
             return $this->image;
         }
 
-        return asset('storage/'.$this->image);
+        return asset('storage/' . $this->image);
     }
 
     public function getSalePercentAttribute()

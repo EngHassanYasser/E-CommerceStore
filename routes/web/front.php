@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\Front\CurrencyConverterController;
-use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\CurrencyConverterController;
+use App\Http\Controllers\HomeController;
 
  Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/contact',[HomeController::class, 'contact'])->name('contact');

@@ -16,8 +16,12 @@ class Admin extends User
         Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'phone_number', 'password', 'status',
-];
+        'name',
+        'email',
+        'phone_number',
+        'password',
+        'status',
+    ];
 
     protected $hidden = [
         'password',

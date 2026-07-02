@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\StoreProductRequest;
 use App\Http\Requests\Web\UpdateProductRequest;
+use App\Http\Requests\Api\StoreProductRequest as StoreProductRequestApi;
+use App\Http\Requests\Api\UpdateProductRequest as UpdateProductRequestApi;
 use App\Models\Category;
 use App\Models\Flag;
 use App\Models\Product;
 use App\Services\ProductService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ProductsController extends Controller
@@ -19,6 +22,10 @@ class ProductsController extends Controller
     public function __construct(
         protected ProductService $productService
     ) {}
+    public function indexApi(Request $request)
+    {
+        return $this->productService->getProductsForApi($request->query());
+    }
 
     public function index()
     {
@@ -31,7 +38,7 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        return view('dashboard.products.create',[
+        return view('dashboard.products.create', [
             'product' => new Product(),
             'categories' => Category::all(),
             'tags' => '',
@@ -48,7 +55,11 @@ class ProductsController extends Controller
             'slug' => Str::slug($request->name),
         ]);
         $this->productService->storeFromDashboard($request->validated());
-        return redirect()->route('products.index')->with('success', 'Product created successfully');
+        return redirect()->route('product.index')->with('success', 'Product created successfully');
+    }
+    public function storeApi(StoreProductRequestApi $request)
+    {
+        return $this->productService->store($request->validated());
     }
 
     /**
@@ -59,6 +70,13 @@ class ProductsController extends Controller
         $product = $this->productService->find($id);
 
         return view('dashboard.products.show', compact('product'));
+    }
+    public function showModel(Product $product)
+    {
+        if ($product->status != 'active') {
+            abort(404);
+        }
+        return view('front.products.show', compact('product'));
     }
 
     /**
@@ -75,19 +93,32 @@ class ProductsController extends Controller
      */
     public function update(UpdateProductRequest $request, string $id)
     {
-        $data=$request->validated();
+        $data = $request->validated();
         $file = $request->file('image');
-        $this->productService->updateWithTags($id,$data,$file);
-        return redirect()->route('products.index')->with('success', 'Product updated successfully');
+
+        $this->productService->updateWithTags($id, $data, $file);
+        
+        return redirect()->route('product.index')->with('success', 'Product updated successfully');
+    }
+
+    public function updateApi(UpdateProductRequestApi $request, Product $product)
+    {
+        return $this->productService->update($product, $request->validated());
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $this->productService->deleteByID($id);
+        $product = $this->productService->deleteByID($id);
 
-        return redirect()->route('products.index')->with('success', 'Product deleted successfully');
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Product deleted successfully',
+                'product' => $product,
+            ], 200);
+        }
+        return redirect()->route('product.index')->with('success', 'Product deleted successfully');
     }
 }

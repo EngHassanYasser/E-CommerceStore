@@ -23,6 +23,7 @@ Route::group([
     require __DIR__ . '/web/checkout.php';
     require __DIR__ . '/web/profile.php';
     require __DIR__ . '/web/cart.php';
+    require __DIR__ . '/web/category.php';
 });
 
 require __DIR__ . '/web/dashboard.php';

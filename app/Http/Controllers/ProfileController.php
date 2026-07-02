@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Web\UpdateProfileRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use App\Services\ProfileService;
-
 class ProfileController extends Controller
 {
     /**
@@ -23,15 +21,21 @@ class ProfileController extends Controller
             'user' => $request->user(),
         ]);
     }
+     public function editDashboard()
+    {
+        $data = $this->profileService->getEditData();
+
+        return view('dashboard.profile.edite', $data);
+    }
 
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(UpdateProfileRequest $request)
     {
         $this->profileService->update($request->user(), $request->validated());
 
-        return redirect()->route('profile.edite')->with('status', 'profile-updated');
+        return redirect()->route('profile.edite')->with('success', 'Profile updated successfully');
     }
 
     /**

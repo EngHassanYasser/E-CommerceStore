@@ -9,6 +9,3 @@
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-require __DIR__ . '/api/auth.php';
-require __DIR__ . '/api/product.php';

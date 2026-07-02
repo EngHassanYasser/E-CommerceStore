@@ -15,7 +15,13 @@ class Cart extends Model
 
     protected $keyType = 'string';
 
-    protected $fillable = ['cookie_id', 'user_id', 'product_id', 'quantity', 'options'];
+    protected $fillable = [
+        'cookie_id',
+        'user_id',
+        'product_id',
+        'quantity',
+        'options'
+    ];
 
     protected static function booted()
     {
