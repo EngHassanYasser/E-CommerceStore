@@ -73,7 +73,7 @@ class ProductService
     }
     public function getProductsForDashboard()
     {
-        return Product::with(['category', 'store'])->paginate(10);
+        return Product::with(['category'])->paginate(10);
     }
     public function find($id)
     {

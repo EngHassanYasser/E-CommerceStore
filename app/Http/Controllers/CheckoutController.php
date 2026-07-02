@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Front;
+namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidOrderException;
-use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Services\CheckoutService;
 use Illuminate\Support\Facades\Request;

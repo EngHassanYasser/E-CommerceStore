@@ -15,7 +15,7 @@ return [
     ],
     [
         'icon' => 'nav-icon fas fa-box-open',
-        'route' => 'products.index',
+        'route' => 'product.index',
         'title' => 'products',
         'ability' => 'products.view',
     ]

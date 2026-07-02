@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Front;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\StoreCartRequest;
 use App\Http\Requests\Web\UpdateCartRequest;
 use App\Models\Cart;

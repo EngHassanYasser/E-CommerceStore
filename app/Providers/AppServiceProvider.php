@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Services\CurrencyConverter;
-use App\Services\CurrencyConverterService as CurrencyConverterService;
+use App\Services\CurrencyConverterService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 

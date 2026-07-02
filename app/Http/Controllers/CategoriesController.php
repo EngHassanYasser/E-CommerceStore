@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\category;
 use App\Services\CategoryService;

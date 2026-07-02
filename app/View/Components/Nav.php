@@ -30,12 +30,6 @@ class Nav extends Component
     {
         $user = auth()->user();
 
-        foreach ($items as $key => $item) {
-            if (isset($item['ability']) && ! $user->can($item['ability'])) {
-                unset($items[$key]);
-            }
-        }
-
         return $items;
     }
 }

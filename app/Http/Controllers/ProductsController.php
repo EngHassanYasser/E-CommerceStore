@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\StoreProductRequest;
 use App\Http\Requests\Web\UpdateProductRequest;
 use App\Http\Requests\Api\StoreProductRequest as StoreProductRequestApi;
@@ -22,14 +21,14 @@ class ProductsController extends Controller
     public function __construct(
         protected ProductService $productService
     ) {}
-    public function indexApi(Request $request)
-    {
-        return $this->productService->getProductsForApi($request->query());
-    }
 
-    public function index()
+    public function index(Request $request)
     {
         $products = $this->productService->getProductsForDashboard();
+
+        if ($request->expectsJson()) {
+            return $this->productService->getProductsForApi($request->query());
+        }
         return view('dashboard.products.index', compact('products'));
     }
 
@@ -97,7 +96,7 @@ class ProductsController extends Controller
         $file = $request->file('image');
 
         $this->productService->updateWithTags($id, $data, $file);
-        
+
         return redirect()->route('product.index')->with('success', 'Product updated successfully');
     }
 

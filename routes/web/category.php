@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\support\Facades\Route;
-use App\Http\Controllers\Dashboard\CategoriesController;
+use App\Http\Controllers\CategoriesController;
 
 
 Route::group([

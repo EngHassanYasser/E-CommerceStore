@@ -18,7 +18,7 @@
         <button type="submit" class="btn btn-dark mt-2">Search</button>
     </form>
     <div class="mb-5">
-        <a href={{ route('products.create') }} class="btn btn-sm btn-outline-primary">create</a>
+        <a href={{ route('product.create') }} class="btn btn-sm btn-outline-primary">create</a>
     </div>
     <x-alert type="success" />
     <x-alert type="info" />
@@ -29,7 +29,6 @@
                 <td>Image</td>
                 <td>Name</td>
                 <td>Category</td>
-                <td>store</td>
                 <td>Created At</td>
                 <td></td>
                 <td colspan="2"></td>
@@ -47,7 +46,6 @@
                     </td>
                     <td>{{ $Product->name }}</td>
                     <td>{{ $Product->Category->name }}</td>
-                    <td>{{ $Product->store->name }}</td>
                     <td>{{ $Product->created_at }}</td>
                     <td>
                         @can('edite', $Product)

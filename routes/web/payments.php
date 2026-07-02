@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\Front\PaymentsController;
+use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\StripeWebhooksController;
+use Illuminate\Support\Facades\Route;
+
 Route::middleware('auth')->group(function() {
 Route::get('orders/{order}/pay', [PaymentsController::class, 'create'])
     ->name('orders.payment.create');

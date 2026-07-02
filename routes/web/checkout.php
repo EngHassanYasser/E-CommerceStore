@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\Front\CheckoutController;
+use App\Http\Controllers\CheckoutController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout');
