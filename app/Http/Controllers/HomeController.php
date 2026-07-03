@@ -10,22 +10,23 @@ class HomeController extends Controller
     public function __construct(
         protected ProductService $productService,
         protected CartService $cartService
-    ){}
+    ) {}
     public function index()
     {
         $products = $this->productService->getActiveProducts();
-        $cart_count = $this->cartService->count();
-        return view('front.home', compact('products','cart_count'));
-
+        
+        return view('front.home', compact('products'));
     }
     public function contact()
     {
         return view('front.contact');
     }
-    public function AboutUs() {
+    public function AboutUs()
+    {
         return view('front.about-us');
     }
-    public function HaventFountTheAnswer() {
+    public function HaventFountTheAnswer()
+    {
         return view('front.faq');
     }
 }

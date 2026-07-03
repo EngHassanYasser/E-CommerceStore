@@ -12,15 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('carts', function (Blueprint $table) {
-            $table->uuid('id');
-            $table->uuid('cookie_id');
+            $table->id();
+
             $table->foreignId('user_id')
-                ->nullable()
-                ->constrained('users')
+                ->unique()
+                ->constrained()
                 ->cascadeOnDelete();
-            $table->unsignedSmallInteger('quantity')->default(1);
-            $table->json('options')->nullable();
-            $table->timestamps();
         });
     }
 

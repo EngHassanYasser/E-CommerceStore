@@ -3,16 +3,13 @@
 namespace App\Models;
 
 use App\Observers\CartObserver;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Str;
 
 class Cart extends Model
 {
     use HasFactory;
-
+    public $timestamps = false;
     protected $keyType = 'string';
 
     protected $fillable = [
@@ -23,35 +20,14 @@ class Cart extends Model
         'options'
     ];
 
-    protected static function booted()
-    {
-        static::observe(CartObserver::class);
-        static::addGlobalScope('cookie_id', function (Builder $builder) {
-            $builder->where('cookie_id', '=', Cart::getCookieId());
-        });
-    }
-
-    public static function getCookieId()
-    {
-        $cookie_id = Cookie::get('cart_id');
-
-        if (! $cookie_id) {
-            $cookie_id = str::uuid();
-            Cookie::queue('cart_id', $cookie_id, 30 * 24 * 60);
-        }
-
-        return $cookie_id;
-    }
+    protected static function booted() {}
 
     public function user()
     {
-        return $this->belongsTo(User::class)->withDefault([
-            'name' => 'Anonymous',
-        ]);
+        return $this->belongsTo(User::class);
     }
-
-    public function product()
+    public function items()
     {
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(cart_item::class);
     }
 }

@@ -5,7 +5,7 @@
                    <div class="col-lg-3 col-md-3 col-7">
                        <!-- Start Header Logo -->
                        <a class="navbar-brand" href="{{ route('home') }}">
-                           <img src="{{  asset('assets/images/logo/logo.svg') }}" alt="Logo">
+                           <img src="{{ asset('assets/images/logo/logo.svg') }}" alt="Logo">
                        </a>
                        <!-- End Header Logo -->
                    </div>
@@ -34,16 +34,17 @@
                                </h3>
                            </div>
                            <div class="navbar-cart">
-                               <x-cart-menu />
+                              
+                               {{-- <x-cart-menu :cart="Auth::user()->cart ?? new Cart()" /> --}}
+                             
                            </div>
                        </div>
                    </div>
                </div>
            </div>
-       </div>
-        @if (session('success'))
+           @if (session('success'))
                <div class="alert alert-success text-center">
                    {{ session('success') }}
                </div>
            @endif
-       <!-- End Header Middle -->
+           <!-- End Header Middle -->

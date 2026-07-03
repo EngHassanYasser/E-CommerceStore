@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\StoreScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -32,7 +31,10 @@ class Product extends Model
         'status',
         'quantity',
     ];
-
+    public function cartItems()
+    {
+        return $this->hasMany(cart_item::class);
+    }
     public function Category()
     {
         return $this->belongsTo(Category::class)->withDefault([

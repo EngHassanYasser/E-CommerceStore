@@ -64,13 +64,8 @@ class ProductsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        $product = $this->productService->find($id);
-
-        return view('dashboard.products.show', compact('product'));
-    }
-    public function showModel(Product $product)
+   
+    public function show(Product $product)
     {
         if ($product->status != 'active') {
             abort(404);

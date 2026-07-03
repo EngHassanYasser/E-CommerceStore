@@ -6,6 +6,7 @@ use App\Http\Requests\Web\StoreCartRequest;
 use App\Http\Requests\Web\UpdateCartRequest;
 use App\Models\Cart;
 use App\Services\CartService;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -26,6 +27,7 @@ class CartController extends Controller
      */
     public function store(StoreCartRequest $request)
     {
+        Log::channel('debugging')->error('testing',$request->validated());
         $this->cartService->store($request->validated());
 
         if ($request->expectsJson()) {

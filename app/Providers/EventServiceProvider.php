@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Events\CartCleared;
 use App\Events\OrderCreated;
+use App\Events\UserCreated;
 use App\Listeners\ClearUserCart;
+use App\Listeners\CreateCart;
 use App\Listeners\DeductProductQuantity;
 use App\Listeners\SendOrderCreatedNotification;
 use Illuminate\Auth\Events\Registered;
@@ -34,6 +36,9 @@ class EventServiceProvider extends ServiceProvider
          CartCleared::class => [
          ClearUserCart::class,
         ],
+        UserCreated::class => [
+            CreateCart::class
+        ]
     ];
 
     /**

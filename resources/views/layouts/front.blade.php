@@ -20,7 +20,7 @@
 
 <body>
     <x-layouts.preloader />
-    <x-layouts.header />
+    <x-layouts.header/>
     {{ $breadcrumb ?? '' }}
     {{ $slot }}
     <x-layouts.scroll-top />

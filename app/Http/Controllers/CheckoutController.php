@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidOrderException;
-use App\Models\Cart;
 use App\Services\CheckoutService;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Intl\Countries;
 
 class CheckoutController extends Controller
@@ -13,8 +13,10 @@ class CheckoutController extends Controller
     public function __construct(
         protected CheckoutService $checkoutService
     ) {}
-    public function create(Cart $cart)
+    public function create()
     {
+        $cart = Auth::user()->cart;
+        dd($cart);
         if ($cart->get()->count() == 0) {
             throw new InvalidOrderException('cart is Empty');
         }
@@ -26,6 +28,6 @@ class CheckoutController extends Controller
     }
     public function store(Request $request)
     {
-        return redirect()->route('orders.payment.create',$request->post('order_id'));
+        return redirect()->route('orders.payment.create', $request->post('order_id'));
     }
 }

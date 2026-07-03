@@ -2,68 +2,66 @@
 
 namespace App\Services;
 
-use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CartService
 {
-    protected $items;
-
-    public function __construct()
+    public function getCart()
     {
-        $this->items = collect([]);
+        return Auth::user()->cart()->with(['items','items.products'])->first();
     }
-    public function getCartItems()
+    public function store(array $data)
     {
-        return Cart::all();
-    }
-    public function store($data)
-    {
-        $product = Product::findOrFail($data['product_id'], $quantity = 1);
+        DB::transaction(function () use ($data) {
 
-        $item = Cart::where('product_id', $product->id)->first();
+            $product = Product::whereKey($data['product_id'])
+                ->where('quantity', '>=', $data['quantity'])
+                ->firstOrFail();
 
-        if (! $item) {
-            $cart = Cart::create([
-                'user_id' => Auth::id(),
-                'product_id' => $product->id,
-                'quantity' => $quantity,
-            ]);
+            $cart = Auth::user()->cart;
 
-            $this->items->push($cart);
+            $item = $cart->items()
+                ->where('product_id', $product->id)
+                ->first();
 
-            return;
-        }
-        return $item->increment('quantity', $quantity);
+            if ($item) {
+                $item->increment('quantity', $data['quantity']);
+            } else {
+                $cart->items()->create([
+                    'product_id' => $product->id,
+                    'quantity'   => $data['quantity'],
+                    'price'      => $product->price,
+                ]);
+            }
+        });
     }
     public function total()
     {
-        // return (float) Cart::join('products','products.id','=','carts.product_id')
-        //     ->selectRaw('SUM(products.price * carts.quantity) as total')
-        //     ->value('total') ?? 0;
-
-        return (float) $this->items->sum(function ($item) {
-            return $item->quantity * $item->product->price;
+        return (float) Auth::user()->cart->items->sum(function ($item) {
+            return $item->quantity * $item->price;
         });
     }
     public function update($id, $data)
     {
-        Cart::where('id', $id)
+        Auth::user()->cart
+            ->items()
+            ->whereKey($id)
             ->update([
                 'quantity' => $data['quantity'],
             ]);
     }
     public function count()
     {
-        if (!Auth::check()) {
-            return 0;
-        }
-        return Cart::where('user_id', Auth::user()->id)->count() ?? 0;
+        return Auth::user()->cart->items()->count();
     }
     public function deleteById($id)
     {
-        $model = Cart::findOrFail($id);
-        return $model->delete();
+        $item = Auth::user()->cart
+            ->items()
+            ->findOrFail($id);
+
+        return $item->delete();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\StoreRegisteredUserRequest;
 use App\Providers\RouteServiceProvider;
@@ -13,7 +14,7 @@ use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    public function __construct(protected AuthService $authService){}
+    public function __construct(protected AuthService $authService) {}
     /**
      * Display the registration view.
      */
@@ -27,14 +28,17 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(StoreRegisteredUserRequest $request): RedirectResponse
-    {
-        $user = $this->authService->createUser($request->validated());
+    // public function store(StoreRegisteredUserRequest $request): RedirectResponse
+    // {
+    // //    dd($request->validated());
+        
+    // //     $user = $this->authService->createUser($request->validated());
+    // //     event(new UserCreated($user));
+    // //     event(new Registered($user));
 
-        event(new Registered($user));
 
-        Auth::login($user);
+    // //     Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
-    }
+    // //     return redirect(RouteServiceProvider::HOME);
+    // }
 }

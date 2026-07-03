@@ -3,13 +3,14 @@
 namespace App\Listeners;
 
 use App\Events\CartCleared;
-use App\Repositories\Cart\CartRepository;
+use App\Services\CartService;
+
 class ClearUserCart
 {
     /**
      * Create the event listener.
      */
-    public function __construct(protected CartRepository $cartRepository)
+    public function __construct(protected CartService $cartService)
     {
         //
     }
@@ -19,6 +20,6 @@ class ClearUserCart
      */
      public function handle()
     {
-       $this->cartRepository->empty();
+    //    $this->cartService->empty();
     }
 }
