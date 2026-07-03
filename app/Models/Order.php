@@ -26,7 +26,7 @@ class Order extends Model
             'name' => 'Guest Customer',
         ]);
     }
-    public function orderItems()
+    public function items()
     {
         return $this->hasMany(OrderItem::class);
     }

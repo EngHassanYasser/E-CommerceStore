@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Web\StoreCartRequest;
 use App\Http\Requests\Web\UpdateCartRequest;
-use App\Models\Cart;
 use App\Services\CartService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
@@ -14,11 +14,14 @@ class CartController extends Controller
      * Display a listing of the resource.
      */
 
-    public function __construct(protected CartService $cartService ) {}
+    public function __construct(protected CartService $cartService) {}
 
-    public function index(Cart $cart)
+    public function index()
     {
         $total = $this->cartService->total();
+        $cart = Auth::user()
+            ->cart()->with('items.product')->first();
+   dd($cart->toArray(),$cart->items->count());
         return view('front.cart', compact('cart', 'total'));
     }
 
@@ -27,7 +30,7 @@ class CartController extends Controller
      */
     public function store(StoreCartRequest $request)
     {
-        Log::channel('debugging')->error('testing',$request->validated());
+        Log::channel('debugging')->error('testing', $request->validated());
         $this->cartService->store($request->validated());
 
         if ($request->expectsJson()) {
@@ -53,7 +56,7 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-       $this->cartService->deleteById($id);
+        $this->cartService->deleteById($id);
 
         return [
             'message' => 'item deleted successfully',

@@ -25,6 +25,15 @@
     <section class="checkout-wrapper section">
         <div class="container">
             <div class="row justify-content-center">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="col-lg-8">
                     <form action-="{{ route('checkout') }}" method="post">
                         @csrf
@@ -54,7 +63,7 @@
                 <div class="col-lg-4">
                     <div class="checkout-sidebar">
                         <x-front.coupon />
-                        <x-front.pricing-table :cart="$cart" />
+                        <x-front.pricing-table />
                         <div class="checkout-sidebar-banner mt-30">
                             <a href="product-grids.html">
                                 <img src="https://via.placeholder.com/400x330" alt="#">

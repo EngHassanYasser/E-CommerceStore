@@ -3,23 +3,19 @@
 namespace App\Listeners;
 
 use App\Events\CartCleared;
-use App\Services\CartService;
 
 class ClearUserCart
 {
     /**
      * Create the event listener.
      */
-    public function __construct(protected CartService $cartService)
-    {
-        //
-    }
+    public function __construct() {}
 
     /**
      * Handle the event.
      */
-     public function handle()
+    public function handle(CartCleared $event)
     {
-    //    $this->cartService->empty();
+        $event->user->cart->items()->delete();
     }
 }

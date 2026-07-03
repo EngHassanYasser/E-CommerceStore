@@ -20,6 +20,13 @@ class ProductService
             $flags = $data['flags'] ?? [];
 
             $product->flags()->sync($flags);
+            if (!empty($data['image'])) {
+                $image_name = FileService::upload($data['image'], 'products');
+                $product->update([
+                    'image' => $image_name,
+                ]);
+            }
+
             return $product->fresh();
         });
     }

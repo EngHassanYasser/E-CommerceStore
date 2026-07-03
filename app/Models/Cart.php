@@ -2,16 +2,13 @@
 
 namespace App\Models;
 
-use App\Observers\CartObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 class Cart extends Model
 {
     use HasFactory;
     public $timestamps = false;
     protected $keyType = 'string';
-
     protected $fillable = [
         'cookie_id',
         'user_id',

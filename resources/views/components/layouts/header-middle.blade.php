@@ -34,9 +34,9 @@
                                </h3>
                            </div>
                            <div class="navbar-cart">
-                              
-                               {{-- <x-cart-menu :cart="Auth::user()->cart ?? new Cart()" /> --}}
-                             
+                            @auth
+                               <x-cart-menu />
+                            @endauth
                            </div>
                        </div>
                    </div>

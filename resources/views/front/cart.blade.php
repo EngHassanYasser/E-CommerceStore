@@ -12,7 +12,7 @@
                     <div class="col-lg-6 col-md-6 col-12">
                         <ul class="breadcrumb-nav">
                             <li><a href="{{ route('home') }}"><i class="lni lni-home"></i> Home</a></li>
-                            <li><a href="{{ route('products.index') }}">Shop</a></li>
+                            <li><a href="{{ route('product.index') }}">Shop</a></li>
                             <li>Cart</li>
                         </ul>
                     </div>
@@ -53,11 +53,11 @@
                 <div class="cart-single-list" id="{{ $item->id }}">
                     <div class="row align-items-center">
                         <div class="col-lg-1 col-md-1 col-12">
-                            <a href="{{ route('products.show',$item->product->slug) }}">
+                            <a href="{{ route('product.show',$item->product->slug) }}">
                                 <img src="{{asset('storage/products/' . $item->product->image)}}" alt="#"></a>
                         </div>
                         <div class="col-lg-4 col-md-3 col-12">
-                            <h5 class="product-name"><a href="{{ route('products.show',$item->product->slug) }}">
+                            <h5 class="product-name"><a href="{{ route('product.show',$item->product->slug) }}">
                                   {{ $item->product->name }}</a></h5>
                             <p class="product-des">
                                 <span><em>Type:</em> Mirrorless</span>
@@ -71,7 +71,7 @@
                         </div>
                         <div class="col-lg-2 col-md-2 col-12">
 
-                            <p>{{ App\Helpers\Currency::format($item->quantity * $item->product->price) }}</p>
+                            <p>{{ App\Helpers\Currency::format($item->quantity * $item->price) }}</p>
                         </div>
                         <div class="col-lg-2 col-md-2 col-12">
                             <p>{{App\Helpers\Currency::format(888)}}</p>

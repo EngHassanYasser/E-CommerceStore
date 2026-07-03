@@ -2,7 +2,7 @@
 
 <base href='/public'>
  @section('content')
-<form action="{{ route("products.store") }}" method="post" enctype="multipart/form-data">
+<form action="{{ route("product.store") }}" method="post" enctype="multipart/form-data">
     @csrf
     @if(session('info'))
 

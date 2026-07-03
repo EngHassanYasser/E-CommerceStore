@@ -14,7 +14,6 @@ class HomeController extends Controller
     public function index()
     {
         $products = $this->productService->getActiveProducts();
-        
         return view('front.home', compact('products'));
     }
     public function contact()

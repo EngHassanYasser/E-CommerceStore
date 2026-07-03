@@ -10,7 +10,7 @@ class CartService
 {
     public function getCart()
     {
-        return Auth::user()->cart()->with(['items','items.products'])->first();
+        return Auth::user()->cart()->with(['items','items.product'])->first();
     }
     public function store(array $data)
     {
