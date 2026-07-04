@@ -30,7 +30,8 @@
                         <div class="product-images">
                             <main id="gallery">
                                 <div class="main-img">
-                                    <img src="{{ asset('storage/products/' . $product->image)}}" id="current" alt="#">
+                                    <img src="{{ asset('storage/products/' . $product->image) }}" id="current"
+                                        alt="#">
                                 </div>
                             </main>
                         </div>
@@ -51,8 +52,15 @@
                                 <div class="row d-flex align-items-center">
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="form-group button cart-button">
-                                            <button class="btn add-to-cart" data-id="{{ $product->id }}"
-                                                type="button">add to cart</button>
+                                            @auth
+                                                <button class="btn add-to-cart" data-id="{{ $product->id }}"
+                                                    type="button">add to cart</button>
+                                            @else
+                                                <a href="{{ route('login') }}"
+                                                    class="btn">
+                                                    Sign in to Add to Cart
+                                            </a> @endauth
+
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">

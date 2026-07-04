@@ -21,7 +21,6 @@ class CartController extends Controller
         $total = $this->cartService->total();
         $cart = Auth::user()
             ->cart()->with('items.product')->first();
-   dd($cart->toArray(),$cart->items->count());
         return view('front.cart', compact('cart', 'total'));
     }
 
@@ -30,7 +29,6 @@ class CartController extends Controller
      */
     public function store(StoreCartRequest $request)
     {
-        Log::channel('debugging')->error('testing', $request->validated());
         $this->cartService->store($request->validated());
 
         if ($request->expectsJson()) {

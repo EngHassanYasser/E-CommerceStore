@@ -5,23 +5,36 @@ namespace App\Http\Controllers;
 use App\Facades\Stripe;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PaymentsController extends Controller
 {
     public function __construct() {}
     public function create(Order $order)
     {
-        return view('front.payments.create', [
-            'order' => $order,
-        ]);
+
+        return view('front.payments.create', compact('order'));
     }
     public function createStripePaymentIntent(Order $order)
     {
-        $paymentIntent = Stripe::createIntent($order);
+        try {
+            $paymentIntent = Stripe::createIntent($order);
 
-        return response()->json([
-            'clientSecret' => $paymentIntent->client_secret,
-        ]);
+            return response()->json([
+                'clientSecret' => $paymentIntent->client_secret,
+            ]);
+        } catch (\Throwable $e) {
+            Log::channel('debug')->debug('test', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+            return response()->json([
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ], 500);
+        }
     }
     public function confirm(Request $request, Order $order)
     {

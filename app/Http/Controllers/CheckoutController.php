@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\OrderCreated;
 use App\Exceptions\InvalidOrderException;
 use App\Http\Requests\checkout\storeCheckoutRequest;
 use App\Services\CheckoutService;
@@ -29,7 +28,6 @@ class CheckoutController extends Controller
     public function store(storeCheckoutRequest $request)
     {
         $order = $this->orderService->store($request->validated());
-        event(new OrderCreated($order));
-        return redirect()->route('orders.payment.create', $order->id);
+        return redirect()->route('orders.payment.create', $order);
     }
 }

@@ -3,10 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\OrderCreated;
-use App\Models\User;
-use App\Notifications\OrderCreatedNotification;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification;
 
 class SendOrderCreatedNotification
 {

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Web\StoreOrderRequest;
-use App\Models\Cart;
 use App\Services\OrderService;
 
 class OrderController

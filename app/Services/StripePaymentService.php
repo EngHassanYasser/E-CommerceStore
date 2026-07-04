@@ -48,7 +48,7 @@ class StripePaymentService
     public function calculateAmount(Order $order)
     {
         return (int) round(
-            $order->orderItems->sum(function ($item) {
+            $order->items->sum(function ($item) {
                 return $item->price * $item->quantity;
             }) * 100
         );

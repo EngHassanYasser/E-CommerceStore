@@ -1,116 +1,174 @@
 <x-front-layout title="Order Payment">
+
     <div class="account-login section">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-12">
-                    <div id="payment-message" style="display: none;" class="alert alert-info"> </div>
-                    <form action="" method="" id="payment-form">
+
+                    <div id="payment-message" style="display:none;" class="alert alert-danger"></div>
+
+                    <form id="payment-form">
+
                         <div id="payment-element"></div>
-                        <button type="submit" id="submit" class="btn">
+
+                        <button type="submit" id="submit" class="btn mt-3">
                             <span id="button-text">Pay Now</span>
-                            <span id="spinner" style="display: none;">Processing ....</span>
+                            <span id="spinner" style="display:none;">Processing...</span>
                         </button>
+
                     </form>
+
                 </div>
             </div>
         </div>
     </div>
+
     <script src="https://js.stripe.com/v3/"></script>
 
     <script>
-        // This is your test publishable API key.
-        
         const stripe = Stripe("{{ config('services.stripe.publishable_key') }}");
-        // The items the customer wants to buy
 
         let elements;
 
-        initialize();
+        document.addEventListener("DOMContentLoaded", async function () {
 
-        document
-            .querySelector("#payment-form")
-            .addEventListener("submit", handleSubmit);
+            console.log("Page Loaded");
 
-        // Fetches a payment intent and captures the client secret
+            await initialize();
+
+            document
+                .getElementById("payment-form")
+                .addEventListener("submit", handleSubmit);
+
+        });
+
         async function initialize() {
-            const {
-                clientSecret
-            } = await fetch("{{ route('orders.payment-intent.create', $order->id) }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "_token": "{{ csrf_token() }}"
-                }),
-            }).then((r) => r.json());
 
-            elements = stripe.elements({
-                clientSecret
-            });
+            try {
 
-            const paymentElementOptions = {
-                layout: "accordion",
-            };
+                console.log("Creating PaymentIntent...");
 
-            const paymentElement = elements.create("payment", paymentElementOptions);
-            paymentElement.mount("#payment-element");
+                const response = await fetch(
+                    "{{ route('orders.payment-intent.create', $order) }}", {
+                        method: "POST",
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                        }
+                    }
+                );
+
+                console.log("HTTP Status:", response.status);
+
+                const data = await response.json();
+
+                console.log("Server Response:", data);
+
+                if (!response.ok) {
+                    throw new Error(data.message ?? "Unable to create Payment Intent.");
+                }
+
+                if (!data.clientSecret) {
+                    throw new Error("clientSecret was not returned from server.");
+                }
+
+                console.log("Client Secret:", data.clientSecret);
+
+                elements = stripe.elements({
+                    clientSecret: data.clientSecret
+                });
+
+                const paymentElement = elements.create("payment", {
+                    layout: "accordion"
+                });
+
+                paymentElement.mount("#payment-element");
+
+                console.log("Stripe Elements Mounted Successfully");
+
+            } catch (error) {
+
+                console.error("Initialize Error:");
+                console.error(error);
+
+                showMessage(error.message);
+
+            }
+
         }
 
         async function handleSubmit(e) {
+
             e.preventDefault();
+
             setLoading(true);
 
-            const {
-                error
-            } = await stripe.confirmPayment({
-                elements,
-                confirmParams: {
-                    // Make sure to change this to your payment completion page
-                    return_url: "{{ route('stripe.return', $order->id) }}",
-                },
-            });
+            try {
 
-            // This point will only be reached if there is an immediate error when
-            // confirming the payment. Otherwise, your customer will be redirected to
-            // your `return_url`. For some payment methods like iDEAL, your customer will
-            // be redirected to an intermediate site first to authorize the payment, then
-            // redirected to the `return_url`.
-            if (error.type === "card_error" || error.type === "validation_error") {
+                console.log("Confirming Payment...");
+
+                const result = await stripe.confirmPayment({
+                    elements,
+                    confirmParams: {
+                        return_url: "{{ route('stripe.return', $order) }}"
+                    }
+                });
+
+                console.log(result);
+
+                if (result.error) {
+
+                    console.error("Stripe Error:");
+                    console.error(result.error);
+
+                    showMessage(result.error.message);
+                }
+
+            } catch (error) {
+
+                console.error("Confirm Payment Exception:");
+                console.error(error);
+
                 showMessage(error.message);
-            } else {
-                showMessage("An unexpected error occurred.");
+
+            } finally {
+
+                setLoading(false);
+
             }
 
-            setLoading(false);
         }
 
-        // ------- UI helpers -------
+        function showMessage(message) {
 
-        function showMessage(messageText) {
-            const messageContainer = document.querySelector("#payment-message");
+            console.error("Message:", message);
 
-            messageContainer.style.display = "block";
-            messageContainer.textContent = messageText;
+            const container = document.getElementById("payment-message");
 
-            setTimeout(function() {
-                messageContainer.style.display = "none";
-                messageContainer.textContent = "";
-            }, 4000);
+            container.style.display = "block";
+            container.innerHTML = message;
+
+            setTimeout(() => {
+
+                container.style.display = "none";
+                container.innerHTML = "";
+
+            }, 5000);
+
         }
 
-        // Show a spinner on payment submission
         function setLoading(isLoading) {
-            if (isLoading) {
-                // Disable the button and show a spinner
-                document.querySelector("#submit").disabled = true;
-                document.querySelector("#spinner").style.display = "inline";
-                document.querySelector("#button-text").style.display = "none";
-            } else {
-                document.querySelector("#submit").disabled = false;
-                document.querySelector("#spinner").style.display = "none";
-                document.querySelector("#button-text").style.display = "inline";
-            }
+
+            document.getElementById("submit").disabled = isLoading;
+
+            document.getElementById("spinner").style.display =
+                isLoading ? "inline" : "none";
+
+            document.getElementById("button-text").style.display =
+                isLoading ? "none" : "inline";
+
         }
     </script>
+
 </x-front-layout>
