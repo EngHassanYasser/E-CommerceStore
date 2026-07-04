@@ -29,8 +29,8 @@
                        <div class="middle-right-area">
                            <div class="nav-hotline">
                                <i class="lni lni-phone"></i>
-                               <h3>Hotline:
-                                   <span>(+100) 123 456 7890</span>
+                               <h3>{{ __('app.Hotline') }}:
+                                   <span>{{ __('app.(+100)_123_456_7890') }}</span>
                                </h3>
                            </div>
                            <div class="navbar-cart">

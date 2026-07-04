@@ -1,7 +1,6 @@
 <x-front-layout>
     <x-home.hero-area />
-    <x-home.featured-categories />
-    <x-home.trending-products :products="$products" />
+    <x-home.products :products="$products" />
     <x-home.special-offer />
     <x-home.brands />
     <x-home.shopping-info />

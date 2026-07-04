@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-6 offset-lg-3 col-md-12 col-12">
-                <h2 class="title">Popular Brands</h2>
+                <h2 class="title">{{ __('app.Popular_Brands') }}</h2>
             </div>
         </div>
         <div class="brands-logo-wrapper">

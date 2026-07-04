@@ -7,10 +7,8 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="section-title">
-                            <h2>Contact Us</h2>
-                            <p>There are many variations of passages of Lorem
-                                Ipsum available, but the majority have suffered alteration in some form.</p>
-                        </div>
+                            <h2>{{ __('contact-us.Contact_Us') }}</h2>
+                            <p>{{ __('contact-us.description') }}</div>
                     </div>
                 </div>
                 <div class="contact-info">

@@ -2,8 +2,9 @@
 
 return [
     'home' => 'Home',
-    'about' => 'About',
-    'contact' => 'Contact',
+    'about_us' => 'About',
+    'contact_us' => 'Contact',
     'signin' => 'Sign In',
     'register' => 'Register',
+    'Popular_Brands'=>'Popular_Brands',
 ];

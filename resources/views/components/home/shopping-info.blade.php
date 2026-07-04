@@ -8,8 +8,8 @@
                         <i class="lni lni-delivery"></i>
                     </div>
                     <div class="media-body">
-                        <h5>Free Shipping</h5>
-                        <span>On order over $99</span>
+                        <h5>{{ __('shipping-info.Free_Shipping') }}</h5>
+                        <span>{{ __('shipping-info.On_order_over_$99') }}</span>
                     </div>
                 </li>
                 <!-- Money Return -->
@@ -18,8 +18,7 @@
                         <i class="lni lni-support"></i>
                     </div>
                     <div class="media-body">
-                        <h5>24/7 Support.</h5>
-                        <span>Live Chat Or Call.</span>
+                        <h5>{{ __('shipping-info.24/7_Support') }}</h5>
                     </div>
                 </li>
                 <!-- Support 24/7 -->
@@ -28,8 +27,8 @@
                         <i class="lni lni-credit-cards"></i>
                     </div>
                     <div class="media-body">
-                        <h5>Online Payment.</h5>
-                        <span>Secure Payment Services.</span>
+                        <h5>{{ __('shipping-info.Online_Payment') }}</h5>
+                        <span>{{ __('shipping-info.Secure_Payment_Services') }}</span>
                     </div>
                 </li>
                 <!-- Safe Payment -->
@@ -38,8 +37,8 @@
                         <i class="lni lni-reload"></i>
                     </div>
                     <div class="media-body">
-                        <h5>Easy Return.</h5>
-                        <span>Hassle Free Shopping.</span>
+                        <h5>{{ __('shipping-info.Easy_Return') }}</h5>
+                        <span>{{ __('shipping-info.Hassle_Free_Shopping') }}</span>
                     </div>
                 </li>
             </ul>

@@ -4,9 +4,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="section-title">
-                        <h2>Special Offer</h2>
-                        <p>There are many variations of passages of Lorem Ipsum available, but the majority have
-                            suffered alteration in some form.</p>
+                        <h2>{{ __('special-offer.Special_Offer') }}</h2>
+                        <p>{{ __('special-offer.Take_advantage_of_this_limited-time_special_offer_on_selected_products._Enjoy_premium_quality_at_exceptional_prices_with_exclusive_discounts,_and_do_not_miss_the_opportunity_to_save_more_before_the_offer_ends.') }}</p>
                     </div>
                 </div>
             </div>
